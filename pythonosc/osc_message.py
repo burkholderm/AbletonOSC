@@ -66,6 +66,8 @@ class OscMessage(object):
                     if len(param_stack) < 2:
                         raise ParseError('Unexpected closing bracket in type tag: {0}'.format(type_tag))
                     param_stack.pop()
+                elif param == "N":  # Nil (None) (No bytes are allocated in the argument data)
+                    val = None
                 # TODO: Support more exotic types as described in the specification.
                 else:
                     logging.warning('Unhandled parameter type: {0}'.format(param))
