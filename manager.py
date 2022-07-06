@@ -8,6 +8,8 @@ import logging
 import sys
 import os
 
+from typing import Tuple
+
 logger = logging.getLogger("abletonosc")
 
 if sys.platform == "darwin":
@@ -41,9 +43,20 @@ class Manager(ControlSurface):
             self.osc_server.send("/live/test", ("ok",))
         def reload_callback(params):
             self.reload_imports()
+        def pyeval_callback(_) -> Tuple:
+            flags, code = _
+            logger.info(f'pyeval: {code}')
+            try:
+                ret = [True, eval(code)]
+            except Exception as e:
+                ret = [False, str(e)]
+            if not isinstance(ret[1], (int, float, bool, str)):
+                ret[1] = str(ret[1])
+            self.osc_server.send('/live/pyeval', ret)
 
         self.osc_server.add_handler("/live/test", test_callback)
         self.osc_server.add_handler("/live/reload", reload_callback)
+        self.osc_server.add_handler("/live/pyeval", pyeval_callback)
 
         with self.component_guard():
             self.handlers = [
