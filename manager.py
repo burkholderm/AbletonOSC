@@ -29,7 +29,7 @@ logger.addHandler(file_handler)
 class Manager(ControlSurface):
     def __init__(self, c_instance):
         ControlSurface.__init__(self, c_instance)
-        self.handlers = []
+        self.handler = None
         self.show_message("AbletonOSC: Listening for OSC on port %d" % abletonosc.OSC_LISTEN_PORT)
 
         self.osc_server = abletonosc.OSCServer()
@@ -38,13 +38,13 @@ class Manager(ControlSurface):
         self.init_api()
 
     def init_api(self):
-        def test_callback(params):
+        def test_callback(addr_args, params):
             self.show_message("Received OSC OK")
-            self.osc_server.send("/live/test", ("ok",))
-        def reload_callback(params):
+            self.osc_server.send("/test", ("ok",))
+        def reload_callback(addr_args, params):
             self.reload_imports()
-        def pyeval_callback(_) -> Tuple:
-            flags, code = _
+        def pyeval_callback(addr_args, params) -> Tuple:
+            flags, code = params
             logger.info(f'pyeval: {code}')
             try:
                 ret = [True, eval(code)]
@@ -52,26 +52,18 @@ class Manager(ControlSurface):
                 ret = [False, str(e)]
             if not isinstance(ret[1], (int, float, bool, str)):
                 ret[1] = str(ret[1])
-            self.osc_server.send('/live/pyeval', ret)
+            self.osc_server.send('/pyeval', ret)
 
-        self.osc_server.add_handler("/live/test", test_callback)
-        self.osc_server.add_handler("/live/reload", reload_callback)
-        self.osc_server.add_handler("/live/pyeval", pyeval_callback)
+        self.osc_server.add_handler("/test", test_callback)
+        self.osc_server.add_handler("/reload", reload_callback)
+        self.osc_server.add_handler("/pyeval", pyeval_callback)
 
         with self.component_guard():
-            self.handlers = [
-                abletonosc.SongHandler(self),
-                abletonosc.ApplicationHandler(self),
-                abletonosc.ClipHandler(self),
-                abletonosc.ClipSlotHandler(self),
-                abletonosc.TrackHandler(self),
-                abletonosc.DeviceHandler(self)
-            ]
+            self.handler = abletonosc.AbletonOSCHandler(self)
 
     def clear_api(self):
         self.osc_server.clear_handlers()
-        for handler in self.handlers:
-            handler.clear_api()
+        self.handler.clear_api()
 
     def tick(self):
         """
@@ -86,20 +78,15 @@ class Manager(ControlSurface):
 
     def reload_imports(self):
         try:
-            importlib.reload(abletonosc.application)
-            importlib.reload(abletonosc.clip)
-            importlib.reload(abletonosc.clip_slot)
-            importlib.reload(abletonosc.device)
             importlib.reload(abletonosc.handler)
             importlib.reload(abletonosc.osc_server)
-            importlib.reload(abletonosc.song)
-            importlib.reload(abletonosc.track)
+            importlib.reload(abletonosc.constants)
             importlib.reload(abletonosc)
         except Exception as e:
             exc = traceback.format_exc()
             logging.warning(exc)
 
-        if self.handlers:
+        if self.handler:
             self.clear_api()
             self.init_api()
         logger.info("Reloaded code")

@@ -1,0 +1,2602 @@
+{
+    "Application": {
+        "canonical_paths": [
+            "live_app"
+        ],
+        "children": {
+            "control_surfaces": {
+                "access": "get, observe",
+                "description": "A list of the control surfaces currently selected in Live's\nPreferences.\nIf None is selected in any of the slots or the script is inactive (e.g. when Push2 is selected,\nbut no Push is connected), id 0 will be returned at those indices.",
+                "type": "list of ControlSurface"
+            },
+            "view": {
+                "access": "get",
+                "description": "",
+                "type": "Application.View"
+            }
+        },
+        "description": "This class represents the Live application. It is reachable by the root\npath\nlive_app\n.",
+        "functions": {
+            "get_bugfix_version": {
+                "description": "Returns: the 2 in Live 9.1.2."
+            },
+            "get_document": {
+                "description": "Returns: the current Live Set."
+            },
+            "get_major_version": {
+                "description": "Returns: the 9 in Live 9.1.2."
+            },
+            "get_minor_version": {
+                "description": "Returns: the 1 in Live 9.1.2."
+            },
+            "press_current_dialog_button": {
+                "description": "Parameter:\nindex\nPress the button with the given index in the current dialog box."
+            }
+        },
+        "properties": {
+            "average_process_usage": {
+                "access": "get, observe",
+                "description": "Reports Live's average CPU load.\nNote that Live's CPU meter shows the audio processing load but not Live's overall CPU usage.",
+                "type": "float"
+            },
+            "current_dialog_button_count": {
+                "access": "get",
+                "description": "The number of buttons in the current message box.",
+                "type": "int"
+            },
+            "current_dialog_message": {
+                "access": "get",
+                "description": "The text of the current message box (empty if no message box is currently shown).",
+                "type": "symbol"
+            },
+            "open_dialog_count": {
+                "access": "get, observe",
+                "description": "The number of dialog boxes shown.",
+                "type": "int"
+            },
+            "peak_process_usage": {
+                "access": "get, observe",
+                "description": "Reports Live's peak CPU load.\nNote that Live's CPU meter shows the audio processing load but not Live's overall CPU usage.",
+                "type": "float"
+            }
+        }
+    },
+    "Application.View": {
+        "canonical_paths": [
+            "live_app view"
+        ],
+        "children": {},
+        "description": "This class represents the aspects of the Live application related to\nviewing the application.",
+        "functions": {
+            "available_main_views": {
+                "description": "Returns:\nview names\n[list of symbols].\nThis is a constant list of view names to be used\nas an argument when calling other functions:\nBrowser Arranger Session Detail Detail/Clip Detail/DeviceChain\n."
+            },
+            "focus_view": {
+                "description": "Parameter:\nview_name\nShows named view and focuses on it. You can also pass an empty view_name \u201c \", which refers to the Arrangement or Session View (whichever is visible in the main window)."
+            },
+            "hide_view": {
+                "description": "Parameter:\nview_name\nHides the named view. You can also pass an empty view_name \u201c \", which refers to the Arrangement or Session View (whichever is visible in the main window)."
+            },
+            "is_view_visible": {
+                "description": "Parameter:\nview_name\nReturns: [bool] Whether the specified view is currently visible."
+            },
+            "scroll_view": {
+                "description": "Parameters:\ndirection view_name modifier_pressed\ndirection\n[int] is 0 = up, 1 = down, 2 = left, 3 = right\nmodifier_pressed\n[bool] If view_name is \"Arranger\" and modifier_pressed is 1 and direction is left or right, then the size of the selected time region is modified, otherwise the position of the playback cursor is moved.\nNot all views are scrollable, and not in all directions. Currently, only the\nArranger\n,\nBrowser\n,\nSession\n, and\nDetail/DeviceChain\nviews can be scrolled.\nYou can also pass an empty view_name\n\" \"\n, which refers to the Arrangement or Session View (whichever view is\nvisible)."
+            },
+            "show_view": {
+                "description": "Parameter:\nview_name"
+            },
+            "toggle_browse": {
+                "description": "Displays the device chain and the browser and activates Hot-Swap Mode for the\nselected device. Calling this function again deactivates Hot-Swap Mode."
+            },
+            "zoom_view": {
+                "description": "Parameter:\ndirection view_name modifier_pressed\ndirection\n[int] - 0 = up, 1 = down, 2 = left, 3 = right\nmodifier_pressed\n[bool] If view_name is 'Arrangement', modifier_pressed is 1, and direction is left or right, then the size of the selected time region is modified, otherwise the position of the playback cursor is moved. If view_name is Arrangement and modifier_pressed is 1 and direction is up or down, then only the height of the highlighted track is changed, otherwise the height of all tracks is changed.\nOnly the Arrangement and Session Views can be zoomed. For Session View, the behaviour of zoom_view is identical to scroll_view.\nYou can also pass an empty view_name \u201c \", which refers to the Arrangement or Session View (whichever is visible in the main window)."
+            }
+        },
+        "properties": {
+            "browse_mode": {
+                "access": "get, observe",
+                "description": "1 = Hot-Swap Mode is active for any target.",
+                "type": "bool"
+            },
+            "focused_document_view": {
+                "access": "get, observe",
+                "description": "The name of the currently visible view in the focused Live window ('Session' or 'Arranger').",
+                "type": "unicode"
+            }
+        }
+    },
+    "Chain": {
+        "canonical_paths": [
+            "live_set tracks N devices M chains L",
+            "live_set tracks N devices M return_chains L",
+            "live_set tracks N devices M chains L devices K chains P ...",
+            "live_set tracks N devices M return_chains L devices K chains P ..."
+        ],
+        "children": {
+            "devices": {
+                "access": "get, observe",
+                "description": "",
+                "type": "Device"
+            },
+            "mixer_device": {
+                "access": "get",
+                "description": "",
+                "type": "ChainMixerDevice"
+            }
+        },
+        "description": "This class represents a group device chain in Live.",
+        "functions": {
+            "delete_device": {
+                "description": "Parameter:\nindex [int]\nDelete the device at the given index."
+            }
+        },
+        "properties": {
+            "color": {
+                "access": "get, set, observe",
+                "description": "The RGB value of the chain's color in the form\n0x00rrggbb\nor (2^16 * red) + (2^8) * green + blue, where red, green and blue are\nvalues from 0 (dark) to 255 (light).\nWhen setting the RGB value, the nearest color from the color\nchooser is taken.",
+                "type": "int"
+            },
+            "color_index": {
+                "access": "get, set, observe",
+                "description": "The color index of the chain.",
+                "type": "long"
+            },
+            "has_audio_input": {
+                "access": "get",
+                "description": "",
+                "type": "bool"
+            },
+            "has_audio_output": {
+                "access": "get",
+                "description": "",
+                "type": "bool"
+            },
+            "has_midi_input": {
+                "access": "get",
+                "description": "",
+                "type": "bool"
+            },
+            "has_midi_output": {
+                "access": "get",
+                "description": "",
+                "type": "bool"
+            },
+            "is_auto_colored": {
+                "access": "get, set, observe",
+                "description": "1 = the chain will always have the color of the containing track or chain.",
+                "type": "bool"
+            },
+            "mute": {
+                "access": "get, set, observe",
+                "description": "1 = muted (Chain Activator off)",
+                "type": "bool"
+            },
+            "muted_via_solo": {
+                "access": "get, observe",
+                "description": "1 = muted due to another chain being soloed.",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "unicode"
+            },
+            "solo": {
+                "access": "get, set, observe",
+                "description": "1 = soloed (Solo switch on)\ndoes not automatically turn Solo off in other chains.",
+                "type": "bool"
+            }
+        }
+    },
+    "ChainMixerDevice": {
+        "canonical_paths": [
+            "live_set tracks N devices M chains L mixer_device",
+            "live_set tracks N devices M return_chains L mixer_device"
+        ],
+        "children": {
+            "chain_activator": {
+                "access": "get",
+                "description": "",
+                "type": "DeviceParameter"
+            },
+            "panning": {
+                "access": "get",
+                "description": "[in Audio Effect Racks and Instrument Racks only]",
+                "type": "DeviceParameter"
+            },
+            "sends": {
+                "access": "get, observe",
+                "description": "[in Audio Effect Racks and Instrument Racks only]\nFor Drum Racks, otherwise empty.",
+                "type": "list of DeviceParameter"
+            },
+            "volume": {
+                "access": "get",
+                "description": "[in Audio Effect Racks and Instrument Racks only]",
+                "type": "DeviceParameter"
+            }
+        },
+        "description": "This class represents a chain's mixer device in Live.",
+        "functions": {},
+        "properties": {}
+    },
+    "Clip": {
+        "canonical_paths": [
+            "live_set tracks N clip_slots M clip",
+            "live_set tracks N arrangement_clips M"
+        ],
+        "children": {
+            "view": {
+                "access": "get",
+                "description": "",
+                "type": "Clip.View"
+            }
+        },
+        "description": "This class represents a clip in Live. It can be either an audio clip or a\nMIDI clip in the Arrangement or Session View, depending on the track / slot\nit lives in.",
+        "functions": {
+            "add_new_notes": {
+                "description": "Parameter:\ndictionary\nKey: \"notes\" [list of note specification dictionaries]\nNote specification dictionaries have the following keys:\npitch: [int] the MIDI note number, 0...127, 60 is C3.\nstart_time: [float] the note start time in beats of absolute clip\ntime.\nduration: [float] the note length in beats.\nvelocity (optional): [float] the note velocity, 0 ... 127\n(100 by default).\nmute (optional): [bool] 1 = the note is deactivated\n(0 by default).\nprobability (optional): [float] the chance that the note will be\nplayed:\n1.0 = the note is always played\n0.0 = the note is never played\n(1.0 by default).\nvelocity_deviation (optional): [float] the range of velocity\nvalues at which the note can be played:\n0.0 = no deviation; the note will always play at the velocity specified by the\nvelocity property\n-127.0 to 127.0 = the note will be assigned a velocity value between\nvelocity and velocity + velocity_deviation, inclusive;\nif the resulting range exceeds the limits of MIDI velocity (0 to 127), then\nit will be clamped within those limits\n(0.0 by default).\nrelease_velocity (optional): [float] the note release velocity\n(64 by default).\nReturns a list of note IDs of the added notes.\nFor MIDI clips only.\nAvailable since Live 11.0."
+            },
+            "add_warp_marker": {
+                "description": "Only available for warped Audio Clips. Adds the specified warp marker, if\npossible.\nThe warp marker is specified as a dict which can have a\nbeat_time and a sample_time key, both associated\nwith float values.\nThe sample_time key may be omitted; in this\ncase, Live will calculate the appropriate sample time to create a warp marker at\nthe specified beat time without changing the Clip's playback timing, similar to\nwhat would happen if you were to double-click in the upper half of the Sample\nDisplay in Clip View.\nIf sample_time is specified, certain limitations must be taken\ninto account:"
+            },
+            "apply_note_modifications": {
+                "description": "Parameter:\ndictionary\nKey: \"notes\" [list of note dictionaries] as returned from\nget_notes_extended.\nThe list of note dictionaries passed to the function can be a subset of notes in\nthe clip, but will be ignored if it contains any notes that are not present in\nthe clip.\nFor MIDI clips only.\nAvailable since Live 11.0. Replaces modifying notes with remove_notes followed by set_notes."
+            },
+            "clear_all_envelopes": {
+                "description": "Removes all automation in the clip."
+            },
+            "clear_envelope": {
+                "description": "Parameter:\ndevice_parameter [id]\nRemoves the automation of the clip for the given parameter."
+            },
+            "crop": {
+                "description": "Crops the clip: if the clip is looped, the region outside the loop is removed;\nif it isn't, the region outside the start and end markers."
+            },
+            "deselect_all_notes": {
+                "description": "Call this before replace_selected_notes if you just want to add some\nnotes.\nOutput:\ndeselect_all_notes id 0\nFor MIDI clips only."
+            },
+            "duplicate_loop": {
+                "description": "Makes the loop two times longer by moving loop_end to the right, and duplicates\nboth the notes and the envelopes. If the clip is not looped, the clip start/end\nrange is duplicated. Available for MIDI clips only."
+            },
+            "duplicate_notes_by_id": {
+                "description": "Parameter:\nlist of note IDs.\nOr\ndictionary\nKeys:\nnote_ids [list of note IDs] as returned from\nget_notes_extended\ndestination_time (optional) [double/int]\ntransposition_amount (optional) [int]\nDuplicates all notes matching the given note IDs.\nProvided note IDs must be associated with existing notes in the clip.\nExisting notes can be queried with get_notes_extended.\nThe selection of notes will be duplicated to destination_time, if\nprovided. Otherwise the new notes will be inserted after the last selected note.\nThis behavior can be observed when duplicating notes in the Live GUI.\nIf the transposition_amount is specified, the duplicated notes will be\ntransposed by the number of semitones.\nAvailable for MIDI clips only.\nAvailable since Live 11.1.2"
+            },
+            "duplicate_region": {
+                "description": "Parameter:\nregion_start [double/int]\nregion_length [double/int]\ndestination_time [double/int]\npitch (optional) [int]\ntransposition_amount (optional) [int]\nDuplicate the notes in the specified region to the destination_time.\nOnly notes of the specified pitch are duplicated or all if pitch is -1.\nIf the transposition_amount is not 0, the notes in the region will\nbe transposed by the transpose_amount of semitones.\nAvailable for MIDI clips only."
+            },
+            "fire": {
+                "description": "Same effect as pressing the Clip Launch button."
+            },
+            "get_all_notes_extended": {
+                "description": "Parameter:\ndict (optional) [dict]\n(See below for a discussion of this argument).\nReturns a dictionary of all of the notes in the clip, regardless of where they\nare positioned with respect to the start/end markers and the loop start/loop end,\nas a list of note dictionaries. Each note dictionary consists of the following\nkey-value pairs:\nnote_id: [int] the unique note identifier.\npitch: [int] the MIDI note number, 0...127, 60 is C3.\nstart_time: [float] the note start time in beats of absolute clip\ntime.\nduration: [float] the note length in beats.\nvelocity: [float] the note velocity, 0 ... 127.\nmute: [bool] 1 = the note is deactivated.\nprobability: [float] the chance that the note will be played:\n1.0 = the note is always played;\n0.0 = the note is never played.\nvelocity_deviation: [float] the range of velocity values at which\nthe note can be played:\n0.0 = no deviation; the note will always play at the velocity specified by the\nvelocity property\n-127.0 to 127.0 = the note will be assigned a velocity value between\nvelocity and velocity + velocity_deviation, inclusive;\nif the resulting range exceeds the limits of MIDI velocity (0 to 127), then\nit will be clamped within those limits.\nrelease_velocity: [float] the note release velocity.\nIt is possible to optionally provide a single [dict] argument to this function,\ncontaining a single key-value pair: the key is \"return\" and the associated value\nis a list of the note properties as listed above in the discussion of the\nreturned note dictionaries, e.g. [\"note_id\", \"pitch\", \"velocity\"]. The effect of\nthis will be that the returned note dictionaries will only contain the key-value\npairs for the specified properties, which can be useful to improve patch\nperformance when processing large notes dictionaries.\nFor MIDI clips only.\nAvailable since Live 11.1"
+            },
+            "get_notes": {
+                "description": "Parameter:\nfrom_time [double/int]\nfrom_pitch [int]\ntime_span [double/int]\npitch_span [int]\nReturns a list of notes that start in the given area. The output is\nsimilar to get_selected_notes. from_time and\ntime_span are given in beats.\nDeprecated since Live 11.0. Please use get_notes_extended instead."
+            },
+            "get_notes_by_id": {
+                "description": "Parameter:\nlist of note IDs.\nProvided note IDs must be associated with existing notes in the clip.\nExisting notes can be queried with get_notes_extended.\nReturns a dictionary of notes associated with the provided IDs, as a list of\nnote dictionaries. Each note dictionary consists of the following key-value\npairs:\nnote_id: [int] the unique note identifier.\npitch: [int] the MIDI note number, 0...127, 60 is C3.\nstart_time: [float] the note start time in beats of absolute clip\ntime.\nduration: [float] the note length in beats.\nvelocity: [float] the note velocity, 0 ... 127.\nmute: [bool] 1 = the note is deactivated.\nprobability: [float] the chance that the note will be played:\n1.0 = the note is always played;\n0.0 = the note is never played.\nvelocity_deviation: [float] the range of velocity values at which\nthe note can be played:\n0.0 = no deviation; the note will always play at the velocity specified by the\nvelocity property\n-127.0 to 127.0 = the note will be assigned a velocity value between\nvelocity and velocity + velocity_deviation, inclusive;\nif the resulting range exceeds the limits of MIDI velocity (0 to 127), then\nit will be clamped within those limits.\nrelease_velocity: [float] the note release velocity.\nIt is possible to optionally provide the argument to this function in the form\nof a dictionary instead. The dictionary must include the \"note_ids\" key\nassociated with a list of [int]s, which are the ID values you would like to pass\nto the function.\nIf you use this method, you can optionally provide an additional key-value pair:\nthe key is \"return\" and the associated value is a list of the note properties as\nlisted above in the discussion of the returned note dictionaries, e.g.\n[\"note_id\", \"pitch\", \"velocity\"]. The effect of this will be that the returned\nnote dictionaries will only contain the key-value pairs for the specified\nproperties, which can be useful to improve patch performance when processing\nlarge notes dictionaries.\nFor MIDI clips only.\nAvailable since Live 11.0."
+            },
+            "get_notes_extended": {
+                "description": "Parameters:\nfrom_pitch [int]\npitch_span [int]\nfrom_time [float]\ntime_span [float]\nfrom_time and time_span are given in beats.\nReturns a dictionary of notes that have their start times in the given area, as\na list of note dictionaries. Each note dictionary consists of the following\nkey-value pairs:\nnote_id: [int] the unique note identifier.\npitch: [int] the MIDI note number, 0...127, 60 is C3.\nstart_time: [float] the note start time in beats of absolute clip\ntime.\nduration: [float] the note length in beats.\nvelocity: [float] the note velocity, 0 ... 127.\nmute: [bool] 1 = the note is deactivated.\nprobability: [float] the chance that the note will be played:\n1.0 = the note is always played;\n0.0 = the note is never played.\nvelocity_deviation: [float] the range of velocity values at which\nthe note can be played:\n0.0 = no deviation; the note will always play at the velocity specified by the\nvelocity property\n-127.0 to 127.0 = the note will be assigned a velocity value between\nvelocity and velocity + velocity_deviation, inclusive;\nif the resulting range exceeds the limits of MIDI velocity (0 to 127), then\nit will be clamped within those limits.\nrelease_velocity: [float] the note release velocity.\nIt is possible to optionally provide the arguments to this function in the form\nof a single dictionary instead. The dictionary must include all of the parameter\nnames given above as its keys; the associated values are the parameter values\nyou wish to pass to the function.\nIf you use this method, you can optionally provide an additional key-value pair:\nthe key is \"return\" and the associated value is a list of the note properties as\nlisted above in the discussion of the returned note dictionaries, e.g.\n[\"note_id\", \"pitch\", \"velocity\"]. The effect of this will be that the returned\nnote dictionaries will only contain the key-value pairs for the specified\nproperties, which can be useful to improve patch performance when processing\nlarge notes dictionaries.\nFor MIDI clips only.\nAvailable since Live 11.0. Replaces get_notes."
+            },
+            "get_selected_notes": {
+                "description": "Use this if you want to operate on the selected notes.\nOutput:\nget_selected_notes notes\ncount\nget_selected_notes note\npitch\ntime\nduration\nvelocity\nmuted\n...\nget_selected_notes done\ncount\n[int] is the number of note lines to follow.\npitch\n[int] is the MIDI note number, 0...127, 60 is C3.\ntime\n[double] is the note start time in beats of absolute clip time.\nduration\n[double] is the note length in beats.\nvelocity\n[int] is the note velocity, 1 ... 127.\nmuted\n[bool] 1 = the note is deactivated.\nFor MIDI clips only.\nDeprecated since Live 11.0.\nPlease use get_selected_notes_extended instead."
+            },
+            "get_selected_notes_extended": {
+                "description": "Parameter:\ndict (optional) [dict]\n(See below for a discussion of this argument).\nReturns a dictionary of the selected notes in the clip, as a list of note\ndictionaries. Each note dictionary consists of the following key-value pairs:\nnote_id: [int] the unique note identifier.\npitch: [int] the MIDI note number, 0...127, 60 is C3.\nstart_time: [float] the note start time in beats of absolute clip\ntime.\nduration: [float] the note length in beats.\nvelocity: [float] the note velocity, 0 ... 127.\nmute: [bool] 1 = the note is deactivated.\nprobability: [float] the chance that the note will be played:\n1.0 = the note is always played;\n0.0 = the note is never played.\nvelocity_deviation: [float] the range of velocity values at which\nthe note can be played:\n0.0 = no deviation; the note will always play at the velocity specified by the\nvelocity property\n-127.0 to 127.0 = the note will be assigned a velocity value between\nvelocity and velocity + velocity_deviation, inclusive;\nif the resulting range exceeds the limits of MIDI velocity (0 to 127), then\nit will be clamped within those limits.\nrelease_velocity: [float] the note release velocity.\nIt is possible to optionally provide a single [dict] argument to this function,\ncontaining a single key-value pair: the key is \"return\" and the associated value\nis a list of the note properties as listed above in the discussion of the\nreturned note dictionaries, e.g. [\"note_id\", \"pitch\", \"velocity\"]. The effect of\nthis will be that the returned note dictionaries will only contain the key-value\npairs for the specified properties, which can be useful to improve patch\nperformance when processing large notes dictionaries.\nFor MIDI clips only.\nAvailable since Live 11.0. Replaces get_selected_notes."
+            },
+            "move_playing_pos": {
+                "description": "Parameter:\nbeats\nbeats\n[double] relative jump distance in beats. Negative beats jump\nbackwards.\nJumps by given amount, unquantized.\nUnwarped audio clips, recording audio clips and recording non-overdub\nMIDI clips cannot jump."
+            },
+            "move_warp_marker": {
+                "description": "Parameters:\nbeat_time [double]\nbeat_time_distance [double]\nMoves the warp marker specified by beat_time\nthe specified beat time distance."
+            },
+            "quantize": {
+                "description": "Parameter:\nquantization_grid [int]\namount [double]\nQuantizes all notes in the clip to the quantization_grid taking the song's\nswing_amount into account."
+            },
+            "quantize_pitch": {
+                "description": "Parameter:\npitch [int]\nquantization_grid [int]\namount [double]\nSame as quantize, but only for notes in the given pitch."
+            },
+            "remove_notes": {
+                "description": "Parameter:\nfrom_time [double]\nfrom_pitch [int]\ntime_span [double]\npitch_span [int]\nDeletes all notes that start in the given area. from_time and\ntime_span are given in beats.\nDeprecated since Live 11.0.\nPlease use remove_notes_extended instead.\nIf a device uses the deprecated method in Live 11, a warning\npop-up will notify users that the device needs to be updated."
+            },
+            "remove_notes_by_id": {
+                "description": "Parameter:\nlist of note IDs.\nDeletes all notes associated with the provided IDs.\nProvided note IDs must be associated with existing notes in the clip.\nExisting notes can be queried with get_notes_extended.\nAvailable since Live 11.0."
+            },
+            "remove_notes_extended": {
+                "description": "Parameter:\nfrom_pitch [int]\npitch_span [int]\nfrom_time [float]\ntime_span [float]\nDeletes all notes that start in the given area. from_time and\ntime_span are given in beats.\nAvailable since Live 11.0. Replaces remove_notes."
+            },
+            "remove_warp_marker": {
+                "description": "Parameter: beat_time [float]\nRemoves the warp marker at the given beat time."
+            },
+            "replace_selected_notes": {
+                "description": "To replace the notes selected in the clip, send a series of the\nfollowing function calls to the clip.\nreplace_selected_notes\nnotes\ncount\nnote\npitch\ntime\nduration\nvelocity\nmuted\ndone\nThe sequence is the same as in\nget_selected_notes\n, the parameters are the same too. The sequence must always be\ncompleted, since the clip waits for the respective calls even if\nintermediate messages are sent. If count is zero, this means there are no note\ncalls.\nIn Live, notes don't overlap, so if the new notes overlap with\nunselected notes, the unselected ones are made to fit in the same way as\nwhen you edit notes manually.\nAn example sequence of calls looks like this:\ncall replace_selected_notes\ncall notes 2\ncall note 60 0.0 0.5 100 0\ncall note 62 0.5 0.5 64 0\ncall done\nFor MIDI clips only.\nDeprecated since Live 11.0.\nPlease use apply_note_modifications instead.\nIf a device uses the deprecated method in Live 11, a warning\npop-up will notify users that the device needs to be updated."
+            },
+            "scrub": {
+                "description": "Parameter:\nbeat_time\n[double]\nScrub the clip to a time, specified in beats. This behaves exactly like scrubbing with the mouse; the scrub will respect Global Quantization, starting and looping in time with the transport. The scrub will continue until stop_scrub() is called."
+            },
+            "select_all_notes": {
+                "description": "Use this function to process all notes of a clip,\nindependent of the current selection.\nOutput:\nselect_all_notes id 0\nFor MIDI clips only."
+            },
+            "select_notes_by_id": {
+                "description": "Parameter:\nlist of note IDs.\nSelects all notes associated with the provided IDs.\nNote that this function will not print a warning or error if the list contains nonexistent IDs.\nAvailable since Live 11.0.6"
+            },
+            "set_fire_button_state": {
+                "description": "Parameter:\nstate\n[bool]\nIf the state is set to 1, Live simulates pressing the clip start\nbutton until the state is set to 0, or until the clip is otherwise stopped."
+            },
+            "set_notes": {
+                "description": "Parameter:\nlist_of_notes [pitch, time, duration, velocity, is_muted]\nWill apply the given notes to the clip, overwriting existing notes.\nAn example sequence of calls looks like this:\ncall set_notes\ncall notes 2\ncall note 60 0.0 0.5 100 0\ncall note 62 0.5 0.5 64 0\ncall done\nFor MIDI clips only.\nDeprecated since Live 11.0.\nPlease use add_new_notes or apply_note_modificationsinstead."
+            },
+            "stop": {
+                "description": "Same effect as pressing the stop button of the track, but only if\nthis clip is actually playing or recording. If this\nclip is triggered or if another clip in this track is playing, it has no effect."
+            },
+            "stop_scrub": {
+                "description": "Stops an active scrub on a clip."
+            }
+        },
+        "properties": {
+            "available_warp_modes": {
+                "access": "get",
+                "description": "Returns the list of indexes of the Warp Modes available for the clip. Only\nvalid for audio clips.",
+                "type": "list"
+            },
+            "color": {
+                "access": "get, set, observe",
+                "description": "The RGB value of the clip's color in the form\n0x00rrggbb\nor (2^16 * red) + (2^8) * green + blue, where red, green and blue are\nvalues from 0 (dark) to 255 (light).\nWhen setting the RGB value, the nearest color from the clip color\nchooser is taken.",
+                "type": "int"
+            },
+            "color_index": {
+                "access": "get, set, observe",
+                "description": "The clip's color index.",
+                "type": "int"
+            },
+            "end_marker": {
+                "access": "get, set, observe",
+                "description": "The end marker of the clip in beats, independent of the loop state. Cannot be set\nbefore the start marker.",
+                "type": "double"
+            },
+            "end_time": {
+                "access": "get, observe",
+                "description": "The end time of the clip. For Session View clips, if Loop is on, this is the Loop End, otherwise it's the End Marker. For Arrangement View clips, this is always the position of the clip's rightmost edge in the Arrangement.",
+                "type": "double"
+            },
+            "file_path": {
+                "access": "get",
+                "description": "Get the location of the audio file represented by the clip. Only\navailable for audio clips.",
+                "type": "symbol"
+            },
+            "gain": {
+                "access": "get, set, observe",
+                "description": "The gain of the clip (range is 0.0 to 1.0). Only valid for audio clips.",
+                "type": "double"
+            },
+            "gain_display_string": {
+                "access": "get",
+                "description": "Get the gain display value of the clip as a string (e.g. \"1.3 dB\"). Can only be\ncalled on audio clips.",
+                "type": "symbol"
+            },
+            "groove": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe access to the groove associated with this clip.\nAvailable since Live 11.0.",
+                "type": "Groove"
+            },
+            "has_envelopes": {
+                "access": "get, observe",
+                "description": "Get/observe whether the clip has any automation.",
+                "type": "bool"
+            },
+            "has_groove": {
+                "access": "get",
+                "description": "Returns true if a groove is associated with this clip.\nAvailable since Live 11.0.",
+                "type": "bool"
+            },
+            "is_arrangement_clip": {
+                "access": "get",
+                "description": "1 = The clip is an Arrangement clip.\nA clip can be either an Arrangement or a Session clip.",
+                "type": "bool"
+            },
+            "is_audio_clip": {
+                "access": "get",
+                "description": "0 = MIDI clip, 1 = audio clip",
+                "type": "bool"
+            },
+            "is_midi_clip": {
+                "access": "get",
+                "description": "The opposite of\nis_audio_clip\n.",
+                "type": "bool"
+            },
+            "is_overdubbing": {
+                "access": "get, observe",
+                "description": "1 = clip is overdubbing.",
+                "type": "bool"
+            },
+            "is_playing": {
+                "access": "get, set",
+                "description": "1 = clip is playing or recording.",
+                "type": "bool"
+            },
+            "is_recording": {
+                "access": "get, observe",
+                "description": "1 = clip is recording.",
+                "type": "bool"
+            },
+            "is_triggered": {
+                "access": "get",
+                "description": "1 = Clip Launch button is blinking.",
+                "type": "bool"
+            },
+            "launch_mode": {
+                "access": "get, set, observe",
+                "description": "The Launch Mode of the Clip as an integer index. Available Launch Modes are:\n0 = Trigger (default)\n1 = Gate\n2 = Toggle\n3 = Repeat\nAvailable since Live 11.0.",
+                "type": "int"
+            },
+            "launch_quantization": {
+                "access": "get, set, observe",
+                "description": "The Launch Quantization of the Clip as an integer index. Available Launch Quantization values are:\n0 = Global (default)\n1 = None\n2 = 8 Bars\n3 = 4 Bars\n4 = 2 Bars\n5 = 1 Bar\n6 = 1/2\n7 = 1/2T\n8 = 1/4\n9 = 1/4T\n10 = 1/8\n11 = 1/8T\n12 = 1/16\n13 = 1/16T\n14 = 1/32\nAvailable since Live 11.0.",
+                "type": "int"
+            },
+            "legato": {
+                "access": "get, set, observe",
+                "description": "1 = Legato Mode switch in the Clip's Launch settings is on.\nAvailable since Live 11.0.",
+                "type": "bool"
+            },
+            "length": {
+                "access": "get",
+                "description": "For looped clips: loop length in beats. Otherwise it's the distance in\nbeats from start to end marker. Makes no sense for unwarped audio\nclips.",
+                "type": "double"
+            },
+            "loop_end": {
+                "access": "get, set, observe",
+                "description": "For looped clips: loop end.\nFor unlooped clips: clip end.",
+                "type": "double"
+            },
+            "loop_jump": {
+                "access": "observe",
+                "description": "Bangs when the clip play position is crossing the loop start marker\n(possibly projected into the loop).",
+                "type": "bang"
+            },
+            "loop_start": {
+                "access": "get, set, observe",
+                "description": "For looped clips: loop start.\nFor unlooped clips: clip start.\nloop_start and loop_end are in absolute clip beat time if clip is\nMIDI or warped. The 1.1.1 position has beat time 0. If the clip is\nunwarped audio, they are given in seconds, 0 is the time of the first\nsample in the audio material.",
+                "type": "double"
+            },
+            "looping": {
+                "access": "get, set, observe",
+                "description": "1 = clip is looped. Unwarped audio cannot be looped.",
+                "type": "bool"
+            },
+            "muted": {
+                "access": "get, set, observe",
+                "description": "1 = muted (i.e. the Clip Activator button of the clip is off).",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "symbol"
+            },
+            "notes": {
+                "access": "observe",
+                "description": "Observer sends bang when the list of notes changes.\nAvailable for MIDI clips only.",
+                "type": "bang"
+            },
+            "pitch_coarse": {
+                "access": "get, set, observe",
+                "description": "Pitch shift in semitones (\"Transpose\"), -48 ... 48.\nAvailable for audio clips only.",
+                "type": "int"
+            },
+            "pitch_fine": {
+                "access": "get, set, observe",
+                "description": "Extra pitch shift in cents (\"Detune\"), -50 ... 49.\nAvailable for audio clips only.",
+                "type": "float"
+            },
+            "playing_position": {
+                "access": "get, observe",
+                "description": "Current playing position of the clip.\nFor MIDI and warped audio clips, the value is given in beats of\nabsolute clip time. The clip's beat time of 0 is where 1 is shown in\nthe bar/beat/16th time scale at the top of the clip view.\nFor unwarped audio clips, the position is given in seconds, according\nto the time scale shown at the bottom of the clip view.\nStopped clips have a playing position of 0.",
+                "type": "float"
+            },
+            "playing_status": {
+                "access": "observe",
+                "description": "Observer sends bang when playing/trigger status changes.",
+                "type": "bang"
+            },
+            "position": {
+                "access": "get, observe",
+                "description": "Get and set the clip's loop position. The value will always equal loop_start, however setting this property, unlike setting loop_start, preserves the loop\nlength.",
+                "type": "float"
+            },
+            "ram_mode": {
+                "access": "get, set, observe",
+                "description": "1 = an audio clip\u2019s RAM switch is enabled.",
+                "type": "bool"
+            },
+            "sample_length": {
+                "access": "get",
+                "description": "Length of the Clip's sample, in samples.",
+                "type": "int"
+            },
+            "sample_rate": {
+                "access": "get",
+                "description": "Get the Clip's sample rate.",
+                "type": "float"
+            },
+            "signature_denominator": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "int"
+            },
+            "signature_numerator": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "int"
+            },
+            "start_marker": {
+                "access": "get, set, observe",
+                "description": "The start marker of the clip in beats, independent of the loop state. Cannot be set\nbehind the end marker.",
+                "type": "double"
+            },
+            "start_time": {
+                "access": "get",
+                "description": "The start time of the clip, relative to the global song time. For Session View clips, this is the time the clip was started. For Arrangement View clips, this is the offset within the arrangement. The value is in beats.",
+                "type": "double"
+            },
+            "velocity_amount": {
+                "access": "get, set, observe",
+                "description": "How much the velocity of the note that triggers the clip affects its volume, 0 = no effect, 1 = full effect.\nAvailable since Live 11.0.",
+                "type": "float"
+            },
+            "warp_markers": {
+                "access": "get, observe",
+                "description": "The Clip's Warp Markers as a dict. Observing this property bangs when the warp_markers change.\nThe last Warp Marker in the dict is not visible in the Live interface. This hidden marker is used to calculate the BPM of the last segment.\nAvailable for audio clips only.\nGetting is available since Live 11.0.",
+                "type": "dict/bang"
+            },
+            "warp_mode": {
+                "access": "get, set, observe",
+                "description": "The Warp Mode of the clip as an integer index. Available Warp Modes are:\n0 = Beats Mode\n1 = Tones Mode\n2 = Texture Mode\n3 = Re-Pitch Mode\n4 = Complex Mode\n5 = REX Mode\n6 = Complex Pro Mode\nAvailable for audio clips only.",
+                "type": "int"
+            },
+            "warping": {
+                "access": "get, set, observe",
+                "description": "1 = Warp switch is on.\nAvailable for audio clips only.",
+                "type": "bool"
+            },
+            "will_record_on_start": {
+                "access": "get",
+                "description": "1 for MIDI clips which are in triggered state, with the track armed\nand MIDI Arrangement Overdub on.",
+                "type": "bool"
+            }
+        }
+    },
+    "Clip.View": {
+        "canonical_paths": [
+            "live_set tracks N clip_slots M clip view"
+        ],
+        "children": {},
+        "description": "Representing the view aspects of a Clip.",
+        "functions": {
+            "hide_envelope": {
+                "description": "Hide the Envelopes box."
+            },
+            "select_envelope_parameter": {
+                "description": "Parameter: [DeviceParameter]\nSelect the specified device parameter in the Envelopes box."
+            },
+            "show_envelope": {
+                "description": "Show the Envelopes box."
+            },
+            "show_loop": {
+                "description": "If the clip is visible in Live's Detail View, this function will make the\ncurrent loop visible there."
+            }
+        },
+        "properties": {
+            "grid_is_triplet": {
+                "access": "get, set",
+                "description": "Get/set whether the clip is displayed with a triplet grid.",
+                "type": "bool"
+            },
+            "grid_quantization": {
+                "access": "get, set",
+                "description": "Get/set the grid quantization.",
+                "type": "int"
+            }
+        }
+    },
+    "ClipSlot": {
+        "canonical_paths": [
+            "live_set tracks N clip_slots M"
+        ],
+        "children": {
+            "clip": {
+                "access": "get",
+                "description": "id 0\nif slot is empty",
+                "type": "Clip"
+            }
+        },
+        "description": "This class represents an entry in Live's Session View matrix.\nThe properties\nplaying_status\n,\nis_playing\nand\nis_recording\nare useful for clip slots of Group Tracks. These are always empty and\nrepresent the state of the clips in the tracks within the Group Track.",
+        "functions": {
+            "create_clip": {
+                "description": "Parameter:\nlength\nLength is given in beats and must be a greater value than 0.0. Can only be called on empty\nclip slots in MIDI tracks."
+            },
+            "delete_clip": {
+                "description": "Deletes the contained clip."
+            },
+            "duplicate_clip_to": {
+                "description": "Parameter: target_clip_slot [ClipSlot]\nDuplicates the slot's clip to the given clip slot, overriding the target clip slot's clip if it's not empty."
+            },
+            "fire": {
+                "description": "Parameter:\nrecord_length (optional)\nlaunch_quantization (optional)\nFires the clip or triggers the Stop Button, if any. Starts recording\nif slot is empty and track is armed. Starts recording of armed and\nempty tracks within a Group Track if Preferences->Launch->Start Recording on Scene\nLaunch is ON. If record_length is provided, the slot will record for the\ngiven length in beats. launch_quantization overrides the global quantization\nif provided."
+            },
+            "set_fire_button_state": {
+                "description": "Parameter:\nstate\n[bool]\n1 = Live simulates pressing of Clip Launch\nbutton until the state is set to 0 or until the slot is stopped\notherwise."
+            },
+            "stop": {
+                "description": "Stops playing or recording clips in this track or the tracks within the group, if\nany. It doesn't matter on which slot of the track you call this\nfunction."
+            }
+        },
+        "properties": {
+            "color": {
+                "access": "get, observe",
+                "description": "The color of the first clip in the Group Track if the clip slot is a Group Track slot.",
+                "type": "long"
+            },
+            "color_index": {
+                "access": "get, observe",
+                "description": "The color index of the first clip in the Group Track if the clip slot is a Group Track slot.",
+                "type": "long"
+            },
+            "controls_other_clips": {
+                "access": "get, observe",
+                "description": "1 for a Group Track slot that has non-deactivated clips in the tracks\nwithin its group.\nControl of empty clip slots doesn't count.",
+                "type": "bool"
+            },
+            "has_clip": {
+                "access": "get, observe",
+                "description": "1 = a clip exists in this clip slot.",
+                "type": "bool"
+            },
+            "has_stop_button": {
+                "access": "get, set, observe",
+                "description": "1 = this clip stops its track (or tracks within a Group Track).",
+                "type": "bool"
+            },
+            "is_group_slot": {
+                "access": "get",
+                "description": "1 = this clip slot is a Group Track slot.",
+                "type": "bool"
+            },
+            "is_playing": {
+                "access": "get",
+                "description": "1 = playing_status != 0, otherwise 0.",
+                "type": "bool"
+            },
+            "is_recording": {
+                "access": "get",
+                "description": "1 = playing_status == 2, otherwise 0.",
+                "type": "bool"
+            },
+            "is_triggered": {
+                "access": "get, observe",
+                "description": "1 = clip slot button (Clip Launch, Clip Stop or Clip Record) or button of contained\nclip are blinking.",
+                "type": "bool"
+            },
+            "playing_status": {
+                "access": "get, observe",
+                "description": "0 = all clips in tracks within a Group Track stopped or all tracks within a Group Track are empty.\n1 = at least one clip in a track within a Group Track is playing.\n2 = at least one clip in a track within a Group Track is playing or recording.\nEquals 0 if this is not a clip slot of a Group Track.",
+                "type": "int"
+            },
+            "will_record_on_start": {
+                "access": "get",
+                "description": "1 = clip slot will record on start.",
+                "type": "bool"
+            }
+        }
+    },
+    "CompressorDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents a Compressor device in Live.\nA CompressorDevice shares all of the children, functions and properties of a Device; listed below are the\nmembers unique to it.",
+        "functions": {},
+        "properties": {
+            "available_input_routing_channels": {
+                "access": "get, observe",
+                "description": "The list of available source channels for the compressor's input routing in the sidechain.\nIt's represented as a dictionary with the following key:\navailable_input_routing_channels [list]\nThe list contains dictionaries as described in input_routing_channel.",
+                "type": "dict"
+            },
+            "available_input_routing_types": {
+                "access": "get, observe",
+                "description": "The list of available source types for the compressor's input routing in the sidechain.\nIt's represented as a dictionary with the following key:\navailable_input_routing_types [list]\nThe list contains dictionaries as described in input_routing_type.",
+                "type": "dict"
+            },
+            "input_routing_channel": {
+                "access": "get, set, observe",
+                "description": "The currently selected source channel for the compressor's input routing in the sidechain.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the compressor's\navailable_input_routing_channels.",
+                "type": "dict"
+            },
+            "input_routing_type": {
+                "access": "get, set, observe",
+                "description": "The currently selected source type for the compressor's input routing in the sidechain.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the track's available_input_routing_types.",
+                "type": "dict"
+            }
+        }
+    },
+    "ControlSurface": {
+        "canonical_paths": [
+            "control_surfaces N"
+        ],
+        "children": {},
+        "description": "A ControlSurface can be reached either directly by the root path\ncontrol_surfaces N or by getting a list of active control surface IDs,\nvia calling get control_surfaces on an Application object.\nThe latter list is in the same order in which control surfaces appear in Live's\nLink/MIDI Preferences. Note the same order is not guaranteed when getting a control surface\nvia the control_surfaces N path.\nA control surface can be thought of as a software layer between the Live API and, in this case,\nMax for Live. Individiual controls on the surface are represented by objects that can be grabbed\nand released via Max for Live, to obtain and give back exclusive control (see grab_control and\nrelease_control). In this way, parts of the hardware can be controlled via Max for Live\nwhile other parts can retain their default functionality.\nAdditionally, Live offers a special MaxForLive control surface that has a\nregister_midi_control function. Using this, Max for Live developers can\nset up entirely custom control surfaces by adding and grabbing arbitrary controls.",
+        "functions": {
+            "get_control": {
+                "description": "Parameter:\nname\nReturns the control with the given name."
+            },
+            "get_control_names": {
+                "description": "Returns the list of all control names."
+            },
+            "grab_control": {
+                "description": "Parameter:\ncontrol\nTake ownership of the control. This releases all standard functionality of the control,\nso that it can be used exclusively via Max for Live."
+            },
+            "grab_midi": {
+                "description": "Forward MIDI messages received from the control surface to Max for Live."
+            },
+            "register_midi_control": {
+                "description": "Parameters:\nname [symbol]\nstatus [int]\nnumber [int]\n(MaxForLive control surface only) Register a MIDI control defined by status and\nnumber. Supported status codes are 144 (note on), 176 (continuous control)\nand 224 (pitchbend).\nReturns the LOM ID associated with the control.\nOnce a control is registered and grabbed via grab_control, Live will forward associated\nMIDI messages that it receives to Max for Live. Max for Live can send values to the control (e.g.\nto light an LED) by calling send_value on the control object."
+            },
+            "release_control": {
+                "description": "Parameter:\ncontrol\nRe-establishes the standard functionality for the control."
+            },
+            "release_midi": {
+                "description": "Stop forwarding MIDI messages received from the control surface to Max for Live."
+            },
+            "send_midi": {
+                "description": "Parameter: midi_message [list of int]\nSend midi_message to the control surface."
+            },
+            "send_receive_sysex": {
+                "description": "Parameters:\nsysex_message [list of int]\ntimeout [symbol, int]\nSend sysex_message to the control surface and await a response.\nIf the message is followed by the word timeout and a float, this sets\nthe response timeout accordingly. The default timeout value is 0.2.\nIf the response times out and MIDI has not been grabbed via grab_midi,\nit's not forwarded to Max for Live. If MIDI has been grabbed via Max for Live,\nreceived messages are always forwarded, but the timeout is still reported."
+            }
+        },
+        "properties": {}
+    },
+    "CuePoint": {
+        "canonical_paths": [
+            "live_set cue_points N"
+        ],
+        "children": {},
+        "description": "Represents a locator in the Arrangement View.",
+        "functions": {
+            "jump": {
+                "description": "Set current Arrangement playback position to marker, quantized if song\nis playing."
+            }
+        },
+        "properties": {
+            "name": {
+                "access": "get, observe",
+                "description": "",
+                "type": "symbol"
+            },
+            "time": {
+                "access": "get, observe",
+                "description": "Arrangement position of the marker in beats.",
+                "type": "float"
+            }
+        }
+    },
+    "Device": {
+        "canonical_paths": [
+            "live_set tracks N devices M",
+            "live_set tracks N devices M chains L devices K",
+            "live_set tracks N devices M return_chains L devices K"
+        ],
+        "children": {
+            "parameters": {
+                "access": "get, observe",
+                "description": "Only automatable parameters are accessible. See\nDeviceParameter\nto learn how to modify them.",
+                "type": "list of DeviceParameter"
+            },
+            "view": {
+                "access": "get",
+                "description": "",
+                "type": "Device.View"
+            }
+        },
+        "description": "This class represents a MIDI or audio device in Live.",
+        "functions": {
+            "store_chosen_bank": {
+                "description": "Parameters:\nscript_index\n[int]\nbank_index\n[int]\n(This is related to hardware control surfaces and is usually not\nrelevant.)"
+            }
+        },
+        "properties": {
+            "can_have_chains": {
+                "access": "get",
+                "description": "0 for a single device\n1 for a device Rack",
+                "type": "bool"
+            },
+            "can_have_drum_pads": {
+                "access": "get",
+                "description": "1 for Drum Racks",
+                "type": "bool"
+            },
+            "class_display_name": {
+                "access": "get",
+                "description": "Get the original name of the device (e.g. Operator, Auto Filter).",
+                "type": "symbol"
+            },
+            "class_name": {
+                "access": "get",
+                "description": "Live device type such as\nMidiChord\n,\nOperator\n,\nLimiter\n,\nMxDeviceAudioEffect\n, or\nPluginDevice\n.",
+                "type": "symbol"
+            },
+            "is_active": {
+                "access": "get, observe",
+                "description": "0 = either the device itself or its enclosing Rack device is off.",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "This is the string shown in the title bar of the device.",
+                "type": "symbol"
+            },
+            "type": {
+                "access": "get",
+                "description": "The type of the device. Possible types are: 0 = undefined, 1 = instrument,\n2 = audio_effect, 3 = midi_effect.",
+                "type": "symbol"
+            }
+        }
+    },
+    "Device.View": {
+        "canonical_paths": [
+            "live_set tracks N devices M view",
+            "live_set tracks N devices M chains L devices K view",
+            "live_set tracks N devices M return_chains L devices K view"
+        ],
+        "children": {},
+        "description": "Representing the view aspects of a Device.",
+        "functions": {},
+        "properties": {
+            "is_collapsed": {
+                "access": "get, set, observe",
+                "description": "1 = the device is shown collapsed in the device chain.",
+                "type": "bool"
+            }
+        }
+    },
+    "DeviceIO": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents an input or output bus of a Live device.",
+        "functions": {},
+        "properties": {
+            "available_routing_channels": {
+                "access": "get, observe",
+                "description": "The available channels for this input/output bus.\nThe channels are represented as a dictionary with the following key:\navailable_routing_channels [list]\nThe list contains dictionaries as described in routing_channel.",
+                "type": "dictionary"
+            },
+            "available_routing_types": {
+                "access": "get, observe",
+                "description": "The available types for this input/output bus.\nThe types are represented as a dictionary with the following key:\navailable_routing_types [list]\nThe list contains dictionaries as described in routing_type.",
+                "type": "dictionary"
+            },
+            "default_external_routing_channel_is_none": {
+                "access": "get, set",
+                "description": "1 = the default routing channel for External routing types is none.\nAvailable since Live 11.0.",
+                "type": "bool"
+            },
+            "routing_channel": {
+                "access": "get, set, observe",
+                "description": "The current routing channel for this input/output bus. It is represented as a dictionary\nwith the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to any of the values found in available_routing_channels.",
+                "type": "dictionary"
+            },
+            "routing_type": {
+                "access": "get, set, observe",
+                "description": "The current routing type for this input/output bus. It is represented as a dictionary\nwith the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to any of the values found in available_routing_types.",
+                "type": "dictionary"
+            }
+        }
+    },
+    "DeviceParameter": {
+        "canonical_paths": [
+            "live_set tracks N devices M parameters L"
+        ],
+        "children": {},
+        "description": "This class represents an (automatable) parameter within a MIDI or audio\ndevice. To modify a device parameter, set its\nvalue\nproperty or send its object ID to\nlive.remote~\n.",
+        "functions": {
+            "__str__": {
+                "description": "Returns: [symbol] String representation of the current parameter value."
+            },
+            "re_enable_automation": {
+                "description": "Re-enable automation for this parameter."
+            },
+            "str_for_value": {
+                "description": "Parameter: value [float]\nReturns: [symbol] String representation of the specified value."
+            }
+        },
+        "properties": {
+            "automation_state": {
+                "access": "get, observe",
+                "description": "Get the automation state of the parameter.\n0 = no automation.\n1 = automation active.\n2 = automation overridden.",
+                "type": "int"
+            },
+            "default_value": {
+                "access": "get",
+                "description": "Get the default value for this parameter.\nOnly available for parameters that aren't quantized (see is_quantized).",
+                "type": "float"
+            },
+            "is_enabled": {
+                "access": "get",
+                "description": "1 = the parameter value can be modified directly by the user, by\nsending\nset\nto a\nlive.object\n, by automation or by an assigned MIDI message or keystroke.\nParameters can be disabled because they are macro-controlled, or they are controlled by a live-remote~ object,\nor because Live thinks that they should not be moved.",
+                "type": "bool"
+            },
+            "is_quantized": {
+                "access": "get",
+                "description": "1 for booleans and enums\n0 for int/float parameters\nAlthough parameters like MidiPitch.Pitch appear quantized to the\nuser, they actually have an is_quantized value of 0.",
+                "type": "bool"
+            },
+            "max": {
+                "access": "get",
+                "description": "Largest allowed value.",
+                "type": "float"
+            },
+            "min": {
+                "access": "get",
+                "description": "Lowest allowed value.",
+                "type": "float"
+            },
+            "name": {
+                "access": "get",
+                "description": "The short parameter name as shown in the (closed) automation chooser.",
+                "type": "symbol"
+            },
+            "original_name": {
+                "access": "get",
+                "description": "The name of a Macro parameter before its assignment.",
+                "type": "symbol"
+            },
+            "state": {
+                "access": "get, observe",
+                "description": "The active state of the parameter.\n0 = the parameter is active and can be changed.\n1 = the parameter can be changed but isn't active, so changes won't have an audible effect.\n2 = the parameter cannot be changed.",
+                "type": "int"
+            },
+            "value": {
+                "access": "get, set, observe",
+                "description": "Linear-to-GUI value between min and max.",
+                "type": "float"
+            },
+            "value_items": {
+                "access": "get",
+                "description": "Get a list of the possible values for this parameter.\nOnly available for parameters that are quantized (see is_quantized).",
+                "type": "StringVector"
+            }
+        }
+    },
+    "DrumChain": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents a Drum Rack device chain in Live.\nA DrumChain is a type of Chain, meaning that it has all the children, properties and functions that a Chain has. Listed below are the members unique to DrumChain.",
+        "functions": {},
+        "properties": {
+            "choke_group": {
+                "access": "get, set, observe",
+                "description": "Get/set the chain's choke group.",
+                "type": "int"
+            },
+            "out_note": {
+                "access": "get, set, observe",
+                "description": "Get/set the MIDI note sent to the devices in the chain.",
+                "type": "int"
+            }
+        }
+    },
+    "DrumPad": {
+        "canonical_paths": [
+            "live_set tracks N devices M drum_pads L"
+        ],
+        "children": {
+            "chains": {
+                "access": "get, observe",
+                "description": "",
+                "type": "Chain"
+            }
+        },
+        "description": "This class represents a Drum Rack pad in Live.",
+        "functions": {
+            "delete_all_chains": {
+                "description": ""
+            }
+        },
+        "properties": {
+            "mute": {
+                "access": "get, set, observe",
+                "description": "1 = muted",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, observe",
+                "description": "",
+                "type": "symbol"
+            },
+            "note": {
+                "access": "get",
+                "description": "",
+                "type": "int"
+            },
+            "solo": {
+                "access": "get, set, observe",
+                "description": "1 = soloed (Solo switch on)\nDoes not automatically turn Solo off in other chains.",
+                "type": "bool"
+            }
+        }
+    },
+    "Eq8Device": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents an instance of an EQ Eight device in Live.\nAn Eq8Device has all the properties, functions and children of a Device.\nListed below are members unique to Eq8Device.",
+        "functions": {},
+        "properties": {
+            "edit_mode": {
+                "access": "get, set, observe",
+                "description": "Access to EQ Eight's edit mode, which toggles the channel currently\navailable for editing. The available edit modes depend on the global mode\n(see global_mode) and are encoded as follows:\nIn L/R mode: 0 = L, 1 = R\nIn M/S mode: 0 = M, 1 = S\nIn Stereo mode: 0 = A, 1 = B (inactive)",
+                "type": "bool"
+            },
+            "global_mode": {
+                "access": "get, set, observe",
+                "description": "Access to EQ Eight's global mode. The modes are encoded as follows:\n0 = Stereo\n1 = L/R\n2 = M/S",
+                "type": "int"
+            },
+            "oversample": {
+                "access": "get, set, observe",
+                "description": "Access to EQ Eight's Oversampling parameter. 0 = Off, 1 = On.",
+                "type": "bool"
+            }
+        }
+    },
+    "Eq8Device.View": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "Represents the view aspects of an Eq8Device.\nAn Eq8Device.View has all the children, properties and functions of a Device.View.\nListed below are members unique to it.",
+        "functions": {},
+        "properties": {
+            "selected_band": {
+                "access": "get, set, observe",
+                "description": "The index of the currently selected filter band.",
+                "type": "int"
+            }
+        }
+    },
+    "Groove": {
+        "canonical_paths": [
+            "live_set groove_pool grooves N",
+            "live_set tracks N clip_slots M clip groove"
+        ],
+        "children": {
+            "base": {
+                "access": "get, set",
+                "description": "Get/set the groove's base grid (index based setter).\n0 = 1/4\n1 = 1/8\n2 = 1/8T\n3 = 1/16\n4 = 1/16T\n5 = 1/32",
+                "type": "int"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe the name of the groove.",
+                "type": "symbol"
+            },
+            "quantization_amount": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe the groove's quantization amount.",
+                "type": "float"
+            },
+            "random_amount": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe the groove's random amount.",
+                "type": "float"
+            },
+            "timing_amount": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe the groove's timing amount.",
+                "type": "float"
+            },
+            "velocity_amount": {
+                "access": "get, set, observe",
+                "description": "Get/set/observe the groove's velocity amount.",
+                "type": "float"
+            }
+        },
+        "description": "This class represents a groove in Live.\nAvailable since Live 11.0.\nAll grooves are stored in Live's groove pool.",
+        "functions": {},
+        "properties": {}
+    },
+    "GroovePool": {
+        "canonical_paths": [
+            "live_set groove_pool"
+        ],
+        "children": {
+            "grooves": {
+                "access": "get, observe",
+                "description": "List of grooves in the groove pool from top to bottom, can be accessed via index.",
+                "type": "list of Groove"
+            }
+        },
+        "description": "This class represents the groove pool in Live. It provides access to the current set's list of grooves.",
+        "functions": {},
+        "properties": {}
+    },
+    "HybridReverbDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents an instance of a Hybrid Reverb device in Live.\nA HybridReverbDevice has all the properties, functions and children of a Device.\nListed below are members unique to HybridReverbDevice.",
+        "functions": {},
+        "properties": {
+            "ir_attack_time": {
+                "access": "get, set, observe",
+                "description": "The attack time of the amplitude envelope for the impulse response, in seconds.",
+                "type": "float"
+            },
+            "ir_category_index": {
+                "access": "get, set, observe",
+                "description": "The index of the selected impulse response category.",
+                "type": "int"
+            },
+            "ir_category_list": {
+                "access": "get",
+                "description": "The list of impulse response categories.",
+                "type": "StringVector"
+            },
+            "ir_decay_time": {
+                "access": "get, set, observe",
+                "description": "The decay time of the amplitude envelope for the impulse response, in seconds.",
+                "type": "float"
+            },
+            "ir_file_index": {
+                "access": "get, set, observe",
+                "description": "The index of the selected impulse response files from the current category.",
+                "type": "int"
+            },
+            "ir_file_list": {
+                "access": "get, observe",
+                "description": "The list of impulse response files from the selected category.",
+                "type": "StringVector"
+            },
+            "ir_size_factor": {
+                "access": "get, set, observe",
+                "description": "The relative size of the impulse response, 0.0 to 1.0.",
+                "type": "float"
+            },
+            "ir_time_shaping_on": {
+                "access": "get, set, observe",
+                "description": "Enables transforming the current selected impulse response with an amplitude envelope and size parameter.\n1 = enabled.",
+                "type": "bool"
+            }
+        }
+    },
+    "MaxDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents a Max for Live device in Live.\nA MaxDevice is a type of Device, meaning that it has all the children, properties and functions that a Device has. Listed below are the members unique to MaxDevice.",
+        "functions": {
+            "get_bank_count": {
+                "description": "Returns: [int] the number of parameter banks."
+            },
+            "get_bank_name": {
+                "description": "Parameters: bank_index [int]\nReturns: [list of symbols] The name of the parameter bank specified by bank_index."
+            },
+            "get_bank_parameters": {
+                "description": "Parameters: bank_index [int]\nReturns: [list of ints] The indices of the parameters contained in the bank specified by bank_index. Empty slots are marked as -1. Bank index -1 refers to the \"Best of\" bank."
+            }
+        },
+        "properties": {
+            "audio_inputs": {
+                "access": "get, observe",
+                "description": "List of the audio inputs that the MaxDevice offers.",
+                "type": "list of DeviceIO"
+            },
+            "audio_outputs": {
+                "access": "get, observe",
+                "description": "List of the audio outputs that the MaxDevice offers.",
+                "type": "list of DeviceIO"
+            },
+            "midi_inputs": {
+                "access": "get, observe",
+                "description": "List of the midi inputs that the MaxDevice offers.\nAvailable since Live 11.0.",
+                "type": "list of DeviceIO"
+            },
+            "midi_outputs": {
+                "access": "get, observe",
+                "description": "List of the midi outputs that the MaxDevice offers.\nAvailable since Live 11.0.",
+                "type": "list of DeviceIO"
+            }
+        }
+    },
+    "MixerDevice": {
+        "canonical_paths": [
+            "live_set tracks N mixer_device"
+        ],
+        "children": {
+            "crossfader": {
+                "access": "get",
+                "description": "[in master track only]",
+                "type": "DeviceParameter"
+            },
+            "cue_volume": {
+                "access": "get",
+                "description": "[in master track only]",
+                "type": "DeviceParameter"
+            },
+            "left_split_stereo": {
+                "access": "get",
+                "description": "The Track's Left Split Stereo Pan Parameter.",
+                "type": "DeviceParameter"
+            },
+            "panning": {
+                "access": "get",
+                "description": "",
+                "type": "DeviceParameter"
+            },
+            "right_split_stereo": {
+                "access": "get",
+                "description": "The Track's Right Split Stereo Pan Parameter.",
+                "type": "DeviceParameter"
+            },
+            "sends": {
+                "access": "get, observe",
+                "description": "One send per return track.",
+                "type": "list of DeviceParameter"
+            },
+            "song_tempo": {
+                "access": "get",
+                "description": "[in master track only]",
+                "type": "DeviceParameter"
+            },
+            "track_activator": {
+                "access": "get",
+                "description": "",
+                "type": "DeviceParameter"
+            },
+            "volume": {
+                "access": "get",
+                "description": "",
+                "type": "DeviceParameter"
+            }
+        },
+        "description": "This class represents a mixer device in Live. It provides access to\nvolume, panning and other\nDeviceParameter\nobjects. See\nDeviceParameter\nto learn how to modify them.",
+        "functions": {},
+        "properties": {
+            "crossfade_assign": {
+                "access": "get, set, observe",
+                "description": "0 = A, 1 = none, 2 = B [not in master track]",
+                "type": "int"
+            },
+            "panning_mode": {
+                "access": "get, set, observe",
+                "description": "Access to the Track mixer's pan mode: 0 = Stereo, 1 = Split Stereo.",
+                "type": "int"
+            }
+        }
+    },
+    "PluginDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents a plug-in device.\nA PluginDevice is a type of Device, meaning that it has all the children, properties and functions that a Device has. Listed below are the members unique to PluginDevice.",
+        "functions": {},
+        "properties": {}
+    },
+    "RackDevice": {
+        "canonical_paths": [],
+        "children": {
+            "chains": {
+                "access": "get, observe",
+                "description": "The Rack's chains.",
+                "type": "list of Chain"
+            },
+            "drum_pads": {
+                "access": "get, observe",
+                "description": "All 128 Drum Pads for the topmost Drum Rack. Inner Drum\nRacks return a list of 0 entries.",
+                "type": "list of DrumPad"
+            },
+            "return_chains": {
+                "access": "get, observe",
+                "description": "The Rack's return chains.",
+                "type": "list of Chain"
+            },
+            "visible_drum_pads": {
+                "access": "get, observe",
+                "description": "All 16 visible DrumPads for the topmost Drum Rack. Inner Drum Racks\nreturn a list of 0 entries.",
+                "type": "list of DrumPad"
+            }
+        },
+        "description": "This class represents a Live Rack Device.\nA RackDevice is a type of Device, meaning that it has all the children, properties and functions that a Device has. Listed below are members unique to RackDevice.",
+        "functions": {
+            "add_macro": {
+                "description": "Increases the number of visible macro controls.\nAvailable since Live 11.0."
+            },
+            "copy_pad": {
+                "description": "Parameters:\nsource_index\n[int]\ndestination_index\n[int]\nCopies all content of a Drum Rack pad from a source pad to a destination pad.\nThe source_index and destination_index refer to pad indices inside a\nDrum Rack."
+            },
+            "delete_selected_variation": {
+                "description": "Deletes the currently selected macro variation.\nDoes nothing if there is no selected variation.\nAvailable since Live 11.0."
+            },
+            "randomize_macros": {
+                "description": "Randomizes the values of eligible macro controls.\nAvailable since Live 11.0."
+            },
+            "recall_last_used_variation": {
+                "description": "Recalls the macro variation that was recalled most recently.\nAvailable since Live 11.0."
+            },
+            "recall_selected_variation": {
+                "description": "Recalls the currently selected macro variation.\nAvailable since Live 11.0."
+            },
+            "remove_macro": {
+                "description": "Decreases the number of visible macro controls.\nAvailable since Live 11.0."
+            },
+            "store_variation": {
+                "description": "Stores a new variation of the values of all currently mapped macros.\nAvailable since Live 11.0."
+            }
+        },
+        "properties": {
+            "can_show_chains": {
+                "access": "get",
+                "description": "1 = The Rack contains an instrument device that is capable of showing\nits chains in Session View.",
+                "type": "bool"
+            },
+            "has_drum_pads": {
+                "access": "get, observe",
+                "description": "1 = the device is a Drum Rack with pads. A nested Drum Rack is a Drum Rack without pads.\nOnly available for Drum Racks.",
+                "type": "bool"
+            },
+            "has_macro_mappings": {
+                "access": "get, observe",
+                "description": "1 = any of a Rack's Macros are mapped to a parameter.",
+                "type": "bool"
+            },
+            "is_showing_chains": {
+                "access": "get, set, observe",
+                "description": "1 = The Rack contains an instrument device that is showing\nits chains in Session View.",
+                "type": "bool"
+            },
+            "selected_variation_index": {
+                "access": "get, set",
+                "description": "Get/set the currently selected variation.\nAvailable since Live 11.0.",
+                "type": "int"
+            },
+            "variation_count": {
+                "access": "get, observe",
+                "description": "The number of currently stored macro variations.\nAvailable since Live 11.0.",
+                "type": "int"
+            }
+        }
+    },
+    "RackDevice.View": {
+        "canonical_paths": [],
+        "children": {
+            "selected_chain": {
+                "access": "get, set, observe",
+                "description": "Currently selected chain.",
+                "type": "Chain"
+            },
+            "selected_drum_pad": {
+                "access": "get, set, observe",
+                "description": "Currently selected Drum Rack pad.\nOnly available for Drum Racks.",
+                "type": "DrumPad"
+            }
+        },
+        "description": "Represents the view aspects of a Rack Device.\nA RackDevice.View is a type of Device.View, meaning that it has all the properties that a Device.View has. Listed below are the members unique to RackDevice.View.",
+        "functions": {},
+        "properties": {
+            "drum_pads_scroll_position": {
+                "access": "get, set, observe",
+                "description": "Lowest row of pads visible, range: 0 - 28.\nOnly available for Drum Racks.",
+                "type": "int"
+            },
+            "is_showing_chain_devices": {
+                "access": "get, set, observe",
+                "description": "1 = the devices in the currently selected chain are visible.",
+                "type": "bool"
+            }
+        }
+    },
+    "Sample": {
+        "canonical_paths": [
+            "live_set tracks N devices N sample"
+        ],
+        "children": {},
+        "description": "This class represents a sample file loaded into Simpler.",
+        "functions": {
+            "clear_slices": {
+                "description": "Clear all slices created in Manual Slicing Mode."
+            },
+            "gain_display_string": {
+                "description": "Returns: [list of symbols] The sample's gain value as a string, e.g. \"0.0 dB\"."
+            },
+            "insert_slice": {
+                "description": "Parameters: slice_time [int]\nInsert a new slice at the specified time if there is none."
+            },
+            "move_slice": {
+                "description": "Parameters: source_time [int] destination_time [int]\nMove an existing slice to a specified time."
+            },
+            "remove_slice": {
+                "description": "Parameters: slice_time [int]\nRemove a slice at the specified time if it exists."
+            },
+            "reset_slices": {
+                "description": "Reset all edited slices to their original positions."
+            }
+        },
+        "properties": {
+            "beats_granulation_resolution": {
+                "access": "get, set, observe",
+                "description": "Get/set which divisions to preserve in the sample in Beats Mode.\n0 = 1 Bar\n1 = 1/2\n2 = 1/4\n3 = 1/8\n4 = 1/16\n5 = 1/32\n6 = Transients",
+                "type": "int"
+            },
+            "beats_transient_envelope": {
+                "access": "get, set, observe",
+                "description": "Get/set the duration of a volume fade applied to each segment of audio in Beats Mode.\n0 = fastest decay\n100 = no fade",
+                "type": "float"
+            },
+            "beats_transient_loop_mode": {
+                "access": "get, set, observe",
+                "description": "Get/set the Transient Loop Mode applied to each segment of audio in Beats Mode.\n0 = Off\n1 = Loop Forward\n2 = Loop Back-and-Forth",
+                "type": "int"
+            },
+            "complex_pro_envelope": {
+                "access": "get, set, observe",
+                "description": "Get/set the Envelope parameter in Complex Pro Mode.",
+                "type": "float"
+            },
+            "complex_pro_formants": {
+                "access": "get, set, observe",
+                "description": "Get/set the Formants parameter in Complex Pro Mode.",
+                "type": "float"
+            },
+            "end_marker": {
+                "access": "get, set, observe",
+                "description": "Get/set the position of the sample's end marker.",
+                "type": "int"
+            },
+            "file_path": {
+                "access": "get, observe",
+                "description": "Get the path of the sample file.",
+                "type": "unicode"
+            },
+            "gain": {
+                "access": "get, set, observe",
+                "description": "Get/set the sample gain.",
+                "type": "float"
+            },
+            "length": {
+                "access": "get",
+                "description": "Get the length of the sample file in sample frames.",
+                "type": "int"
+            },
+            "sample_rate": {
+                "access": "get",
+                "description": "The sample rate of the loaded sample.\nAvailable since Live 11.0.",
+                "type": "int"
+            },
+            "slices": {
+                "access": "get, observe",
+                "description": "The positions of all playable slices in the sample, in sample frames. Divide these values by the sample_rate to get the slice times in seconds.\nAvailable since Live 11.0.",
+                "type": "list of int"
+            },
+            "slicing_beat_division": {
+                "access": "get, set, observe",
+                "description": "Get/set the slice beat division in Beat Slicing Mode.\n0 = 1/16\n1 = 1/16T\n2 = 1/8\n3 = 1/8T\n4 = 1/4\n5 = 1/4T\n6 = 1/2\n7 = 1/2T\n8 = 1 Bar\n9 = 2 Bars\n10 = 4 Bars",
+                "type": "int"
+            },
+            "slicing_region_count": {
+                "access": "get, set, observe",
+                "description": "Get/set the number of slice regions in Region Slicing Mode.",
+                "type": "int"
+            },
+            "slicing_sensitivity": {
+                "access": "get, set, observe",
+                "description": "Get/set the slicing sensitivity. Values are between 0.0 and 1.0.",
+                "type": "float"
+            },
+            "slicing_style": {
+                "access": "get, set, observe",
+                "description": "Get/set the Slicing Mode.\n0 = Transient\n1 = Beat\n2 = Region\n3 = Manual",
+                "type": "int"
+            },
+            "start_marker": {
+                "access": "get, set, observe",
+                "description": "Get/set the position of the sample's start marker.",
+                "type": "int"
+            },
+            "texture_flux": {
+                "access": "get, set, observe",
+                "description": "Get/set the Flux parameter in Texture Mode.",
+                "type": "float"
+            },
+            "texture_grain_size": {
+                "access": "get, set, observe",
+                "description": "Get/set the Grain Size parameter in Texture Mode.",
+                "type": "float"
+            },
+            "tones_grain_size": {
+                "access": "get, set, observe",
+                "description": "Get/set the Grain Size parameter in Tones Mode.",
+                "type": "float"
+            },
+            "warp_markers": {
+                "access": "get, observe",
+                "description": "The Sample's Warp Markers as a dict. Observing this property bangs when the warp_markers change.\nThe last Warp Marker in the dict is not visible in the Live interface. This hidden, or \"shadow\" marker is used to calculate the BPM of the last segment.\nAvailable since Live 11.0.",
+                "type": "dict/bang"
+            },
+            "warp_mode": {
+                "access": "get, set, observe",
+                "description": "Get/set the Warp Mode.\n0 = Beats Mode\n1 = Tones Mode\n2 = Texture Mode\n3 = Re-Pitch Mode\n4 = Complex Mode\n6 = Complex Pro Mode",
+                "type": "int"
+            },
+            "warping": {
+                "access": "get, set, observe",
+                "description": "1 = warping is enabled.",
+                "type": "bool"
+            }
+        }
+    },
+    "Scene": {
+        "canonical_paths": [
+            "live_set scenes N"
+        ],
+        "children": {
+            "clip_slots": {
+                "access": "get, observe",
+                "description": "",
+                "type": "list of ClipSlot"
+            }
+        },
+        "description": "This class represents a series of clip slots in Live's Session View matrix.",
+        "functions": {
+            "fire": {
+                "description": "Parameter:\nforce_legato (optional) [bool]\ncan_select_scene_on_launch (optional) [bool]\nFire all clip slots contained within the scene and select this scene.\nStarts recording of armed and empty tracks within a Group Track in this scene if\nPreferences->Launch->Start Recording on Scene Launch is ON.\nCalling with force_legato = 1 (default = 0) will launch all clips\nimmediately in Legato, independent of their launch mode.\nWhen calling with can_select_scene_on_launch = 0 (default = 1) the scene\nis fired without selecting it."
+            },
+            "fire_as_selected": {
+                "description": "Parameter:\nforce_legato (optional) [bool]\nFire the selected scene, then select the next scene.\nIt doesn't matter on which scene you are calling this function.\nCalling with force_legato = 1 (default = 0) will launch all clips\nimmediately in Legato, independent of their launch mode."
+            },
+            "set_fire_button_state": {
+                "description": "Parameter:\nstate\n[bool]\nIf the state is set to 1, Live simulates pressing of scene button\nuntil the state is set to 0 or until the scene is stopped otherwise."
+            }
+        },
+        "properties": {
+            "color": {
+                "access": "get, set, observe",
+                "description": "The RGB value of the scene's color in the form\n0x00rrggbb\nor (2^16 * red) + (2^8) * green + blue, where red, green and blue are\nvalues from 0 (dark) to 255 (light).\nWhen setting the RGB value, the nearest color from the Scene color\nchooser is taken.",
+                "type": "int"
+            },
+            "color_index": {
+                "access": "get, set, observe",
+                "description": "The color index of the scene.",
+                "type": "long"
+            },
+            "is_empty": {
+                "access": "get",
+                "description": "1 = none of the slots in the scene is filled.",
+                "type": "bool"
+            },
+            "is_triggered": {
+                "access": "get, observe",
+                "description": "1 = scene is blinking.",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "May contain BPM and signature commands (like\n\"128 BPM 3/4\"\n).",
+                "type": "symbol"
+            },
+            "tempo": {
+                "access": "get, set",
+                "description": "Tempo in BPM as found by Live in the name.",
+                "type": "float"
+            }
+        }
+    },
+    "SimplerDevice": {
+        "canonical_paths": [],
+        "children": {
+            "sample": {
+                "access": "get, observe",
+                "description": "The sample currently loaded into Simpler.",
+                "type": "Sample"
+            }
+        },
+        "description": "This class represents an instance of Simpler.\nA Simpler device is a type of device, meaning that it has all the children, properties and functions that a device has. Listed below are members unique to SimplerDevice.",
+        "functions": {
+            "crop": {
+                "description": "Crop the loaded sample to the active region between the start and end markers."
+            },
+            "guess_playback_length": {
+                "description": "Returns: [float] An estimated beat time for the playback length between the start and end markers."
+            },
+            "reverse": {
+                "description": "Reverse the loaded sample."
+            },
+            "warp_as": {
+                "description": "Parameters: beats [int]\nWarp the active region between the start and end markers as the specified number of beats."
+            },
+            "warp_double": {
+                "description": "Double the playback tempo of the active region between the start and end markers."
+            },
+            "warp_half": {
+                "description": "Halve the playback tempo for the active region between the start and end markers."
+            }
+        },
+        "properties": {
+            "can_warp_as": {
+                "access": "get, observe",
+                "description": "1 = warp_as is available.",
+                "type": "bool"
+            },
+            "can_warp_double": {
+                "access": "get, observe",
+                "description": "1 = warp_double is available.",
+                "type": "bool"
+            },
+            "can_warp_half": {
+                "access": "get, observe",
+                "description": "1 = warp_half is available.",
+                "type": "bool"
+            },
+            "multi_sample_mode": {
+                "access": "get, observe",
+                "description": "1 = Simpler is in multisample mode.",
+                "type": "bool"
+            },
+            "pad_slicing": {
+                "access": "get, set, observe",
+                "description": "1 = slices can be added in Slicing Mode by playing notes which are not\nyet assigned to existing slices.",
+                "type": "bool"
+            },
+            "playback_mode": {
+                "access": "get, set, observe",
+                "description": "Get/set Simpler's playback mode.\n0 = Classic Mode\n1 = One-Shot Mode\n2 = Slicing Mode",
+                "type": "int"
+            },
+            "playing_position": {
+                "access": "get, observe",
+                "description": "The current playing position in the sample, expressed as a value between 0. and 1.",
+                "type": "float"
+            },
+            "playing_position_enabled": {
+                "access": "get, observe",
+                "description": "1 = Simpler is playing back the sample and showing the playing position.",
+                "type": "bool"
+            },
+            "retrigger": {
+                "access": "get, set, observe",
+                "description": "1 = Retrigger is enabled in Simpler.",
+                "type": "bool"
+            },
+            "slicing_playback_mode": {
+                "access": "get, set, observe",
+                "description": "Get/set Simpler's Slicing Playback Mode.\n0 = Mono\n1 = Poly\n2 = Thru",
+                "type": "int"
+            },
+            "voices": {
+                "access": "get, set, observe",
+                "description": "Get/set the number of Voices.",
+                "type": "int"
+            }
+        }
+    },
+    "SimplerDevice.View": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "Represents the view aspects of a SimplerDevice.\nA SimplerDevice.View is a type of Device.View, meaning that it has all the properties that a Device.View has. Listed below are the members unique to SimplerDevice.View.",
+        "functions": {},
+        "properties": {
+            "selected_slice": {
+                "access": "get, set, observe",
+                "description": "The currenctly selected slice, identified by its slice time.",
+                "type": "int"
+            }
+        }
+    },
+    "Song": {
+        "canonical_paths": [
+            "live_set"
+        ],
+        "children": {
+            "cue_points": {
+                "access": "get, observe",
+                "description": "Cue points are the markers in the Arrangement to which you can jump.",
+                "type": "list of CuePoint"
+            },
+            "groove_pool": {
+                "access": "get",
+                "description": "Live's groove pool.\nAvailable since Live 11.0.",
+                "type": "GroovePool"
+            },
+            "master_track": {
+                "access": "get",
+                "description": "",
+                "type": "Track"
+            },
+            "return_tracks": {
+                "access": "get, observe",
+                "description": "",
+                "type": "list of Track"
+            },
+            "scenes": {
+                "access": "get, observe",
+                "description": "",
+                "type": "list of Scene"
+            },
+            "tracks": {
+                "access": "get, observe",
+                "description": "",
+                "type": "list of Track"
+            },
+            "view": {
+                "access": "get",
+                "description": "",
+                "type": "Song.View"
+            },
+            "visible_tracks": {
+                "access": "get, observe",
+                "description": "A track is visible if it's not part of a folded group. If a track is scrolled out of view it's still considered visible.",
+                "type": "list of Track"
+            }
+        },
+        "description": "This class represents a Live Set. The current Live Set is reachable by\nthe root path\nlive_set\n.",
+        "functions": {
+            "capture_and_insert_scene": {
+                "description": "Capture the currently playing clips and insert them as a new scene below the selected scene."
+            },
+            "capture_midi": {
+                "description": "Parameter: destination [int]\n0 = auto, 1 = session, 2 = arrangement\nCapture recently played MIDI material from audible tracks into a Live Clip.\nIf destinaton is not set or it is set to auto, the Clip is inserted\ninto the view currently visible in the focused Live window. Otherwise, it is inserted\ninto the specified view."
+            },
+            "continue_playing": {
+                "description": "From the current playback position."
+            },
+            "create_audio_track": {
+                "description": "Parameter:\nindex\nIndex determines where the track is added, it is only valid between 0 and\nlen(song.tracks). Using an index of -1 will add the new track at the end of the list."
+            },
+            "create_midi_track": {
+                "description": "Parameter:\nindex\nIndex determines where the track is added, it is only valid between 0 and\nlen(song.tracks). Using an index of -1 will add the new track at the end of the list."
+            },
+            "create_return_track": {
+                "description": "Adds a new return track at the end."
+            },
+            "create_scene": {
+                "description": "Parameter:\nindex\nReturns: The new scene\nIndex determines where the scene is added. It is only valid between 0 and\nlen(song.scenes). Using an index of -1 will add the new scene at the end of the list."
+            },
+            "delete_return_track": {
+                "description": "Parameter:\nindex\nDelete the return track at the given index."
+            },
+            "delete_scene": {
+                "description": "Parameter:\nindex\nDelete the scene at the given index."
+            },
+            "delete_track": {
+                "description": "Parameter:\nindex\nDelete the track at the given index."
+            },
+            "duplicate_scene": {
+                "description": "Parameter:\nindex\nIndex determines which scene to duplicate."
+            },
+            "duplicate_track": {
+                "description": "Parameter:\nindex\nIndex determines which track to duplicate."
+            },
+            "find_device_position": {
+                "description": "Parameter:\ndevice [live object]\ntarget [live object]\ntarget position [int]\nReturns:\n[int] The position in the target's chain where the device can be\ninserted that is the closest possible to the target position."
+            },
+            "force_link_beat_time": {
+                "description": "Force the Link timeline to jump to Live's current beat time."
+            },
+            "get_beats_loop_length": {
+                "description": "Returns:\nbars.beats.sixteenths.ticks\n[symbol]\nThe Arrangement loop length."
+            },
+            "get_beats_loop_start": {
+                "description": "Returns:\nbars.beats.sixteenths.ticks\n[symbol]\nThe Arrangement loop start."
+            },
+            "get_current_beats_song_time": {
+                "description": "Returns:\nbars.beats.sixteenths.ticks\n[symbol]\nThe current Arrangement playback position."
+            },
+            "get_current_smpte_song_time": {
+                "description": "Parameter:\nformat\nformat\n[int] is the time code type to be returned\n0 = the frame position shows the milliseconds\n1 = Smpte24\n2 = Smpte25\n3 = Smpte30\n4 = Smpte30Drop\n5 = Smpte29\nReturns:\nhours:min:sec:frames\n[symbol]\nThe current Arrangement playback position."
+            },
+            "is_cue_point_selected": {
+                "description": "Returns: bool 1 = the current Arrangement playback position is at a cue point"
+            },
+            "jump_by": {
+                "description": "Parameter:\nbeats\nbeats\n[double] is the amount to jump relatively to the current position"
+            },
+            "jump_to_next_cue": {
+                "description": "Jump to the right, if possible."
+            },
+            "jump_to_prev_cue": {
+                "description": "Jump to the left, if possible."
+            },
+            "move_device": {
+                "description": "Parameter:\ndevice [live object]\ntarget [live object]\ntarget position [int]\nReturns: [int] The position in the target's chain where the device was inserted.\nMove the device to the specified position in the target chain. If the device cannot be moved to the specified position, the nearest possible\nposition is chosen."
+            },
+            "play_selection": {
+                "description": "Do nothing if no selection is set in Arrangement, or play the current selection."
+            },
+            "re_enable_automation": {
+                "description": "Trigger 'Re-Enable Automation', re-activating automation in all running Session clips."
+            },
+            "redo": {
+                "description": "Causes the Live application to redo the last operation."
+            },
+            "scrub_by": {
+                "description": "Parameter:\nbeats\nbeats\n[double] the amount to scrub relative to the current Arrangement\nplayback position\nSame as\njump_by\n, at the moment."
+            },
+            "set_or_delete_cue": {
+                "description": "Toggle cue point at current Arrangement playback position."
+            },
+            "start_playing": {
+                "description": "Start playback from the insert marker."
+            },
+            "stop_all_clips": {
+                "description": "Parameter (optional):\nquantized\nCalling the function with 0 will stop all clips immediately, independent of\nthe launch quantization. The default is '1'."
+            },
+            "stop_playing": {
+                "description": "Stop the playback."
+            },
+            "tap_tempo": {
+                "description": "Same as pressing the Tap Tempo button in the transport bar. The new tempo\nis calculated based on the time between subsequent calls of this\nfunction."
+            },
+            "trigger_session_record": {
+                "description": "Parameter:\nrecord_length (optional)\nStarts recording in either the selected slot or the next empty slot, if the track\nis armed. If record_length is provided, the slot will record for the\ngiven length in beats.\nIf triggered while recording, recording will stop and clip playback will start."
+            },
+            "undo": {
+                "description": "Causes the Live application to undo the last operation."
+            }
+        },
+        "properties": {
+            "appointed_device": {
+                "access": "get, observe",
+                "description": "The appointed device is the one used by a control surface unless the\ncontrol surface itself chooses which device to use. It is marked by a blue hand.",
+                "type": "Device"
+            },
+            "arrangement_overdub": {
+                "access": "get, set, observe",
+                "description": "Get/set the state of the MIDI Arrangement Overdub button.",
+                "type": "bool"
+            },
+            "back_to_arranger": {
+                "access": "get, set, observe",
+                "description": "Get/set the current state of the Back to Arrangement button located\nin Live's transport bar (1 = highlighted). This button is\nused to indicate that the current state of the playback differs from\nwhat is stored in the Arrangement.",
+                "type": "bool"
+            },
+            "can_capture_midi": {
+                "access": "get, observe",
+                "description": "1 = Recently played MIDI material exists that can be captured into a Live Track. See capture_midi.",
+                "type": "bool"
+            },
+            "can_jump_to_next_cue": {
+                "access": "get, observe",
+                "description": "0 = there is no cue\npoint to the right of the current one, or none at all.",
+                "type": "bool"
+            },
+            "can_jump_to_prev_cue": {
+                "access": "get, observe",
+                "description": "0 = there is no cue\npoint to the left of the current one, or none at all.",
+                "type": "bool"
+            },
+            "can_redo": {
+                "access": "get",
+                "description": "1 = there is something in the history to redo.",
+                "type": "bool"
+            },
+            "can_undo": {
+                "access": "get",
+                "description": "1 = there is something in the history to undo.",
+                "type": "bool"
+            },
+            "clip_trigger_quantization": {
+                "access": "get, set, observe",
+                "description": "Reflects the quantization setting in the transport bar.\n0 = None\n1 = 8 Bars\n2 = 4 Bars\n3 = 2 Bars\n4 = 1 Bar\n5 = 1/2\n6 = 1/2T\n7 = 1/4\n8 = 1/4T\n9 = 1/8\n10 = 1/8T\n11 = 1/16\n12 = 1/16T\n13 = 1/32",
+                "type": "int"
+            },
+            "count_in_duration": {
+                "access": "get, observe",
+                "description": "The duration of the Metronome's Count-In setting as an index, mapped as follows:\n0 = None\n1 = 1 Bar\n2 = 2 Bars\n3 = 4 Bars",
+                "type": "int"
+            },
+            "current_song_time": {
+                "access": "get, set, observe",
+                "description": "The playing position in the Live Set, in beats.",
+                "type": "float"
+            },
+            "exclusive_arm": {
+                "access": "get",
+                "description": "Current status of the exclusive Arm option set in the Live\npreferences.",
+                "type": "bool"
+            },
+            "exclusive_solo": {
+                "access": "get",
+                "description": "Current status of the exclusive Solo option set in the Live\npreferences.",
+                "type": "bool"
+            },
+            "groove_amount": {
+                "access": "get, set, observe",
+                "description": "The groove amount from the current set's groove pool (0. - 1.0).",
+                "type": "float"
+            },
+            "is_ableton_link_enabled": {
+                "access": "get, set, observe",
+                "description": "Enable/disable Ableton Link. The Link toggle in the Live's transport bar must be visible to enable Link.",
+                "type": "bool"
+            },
+            "is_ableton_link_start_stop_sync_enabled": {
+                "access": "get, set, observe",
+                "description": "Enable/disable Ableton Link Start Stop Sync.",
+                "type": "bool"
+            },
+            "is_counting_in": {
+                "access": "get, observe",
+                "description": "1 = the Metronome is currently counting in.",
+                "type": "bool"
+            },
+            "is_playing": {
+                "access": "get, set, observe",
+                "description": "Get/set if Live's transport is running.",
+                "type": "bool"
+            },
+            "last_event_time": {
+                "access": "get",
+                "description": "The beat time of the last event (i.e. automation breakpoint, clip\nend, cue point, loop end) in the Arrangement.",
+                "type": "float"
+            },
+            "loop": {
+                "access": "get, set, observe",
+                "description": "Get/set the enabled state of the Arrangement loop.",
+                "type": "bool"
+            },
+            "loop_length": {
+                "access": "get, set, observe",
+                "description": "Arrangement loop length in beats.",
+                "type": "float"
+            },
+            "loop_start": {
+                "access": "get, set, observe",
+                "description": "Arrangement loop start in beats.",
+                "type": "float"
+            },
+            "metronome": {
+                "access": "get, set, observe",
+                "description": "Get/set the enabled state of the metronome.",
+                "type": "bool"
+            },
+            "midi_recording_quantization": {
+                "access": "get, set, observe",
+                "description": "Get/set the current Record Quantization value.\n0 = None\n1 = 1/4\n2 = 1/8\n3 = 1/8T\n4 = 1/8 + 1/8T\n5 = 1/16\n6 = 1/16T\n7 = 1/16 + 1/16T\n8 = 1/32",
+                "type": "int"
+            },
+            "nudge_down": {
+                "access": "get, set, observe",
+                "description": "1 = the Tempo Nudge Down button in the transport bar is currently pressed.",
+                "type": "bool"
+            },
+            "nudge_up": {
+                "access": "get, set, observe",
+                "description": "1 = the Tempo Nudge Up button in the transport bar is currently pressed.",
+                "type": "bool"
+            },
+            "overdub": {
+                "access": "get, set, observe",
+                "description": "1 = MIDI Arrangement Overdub is enabled in the transport.",
+                "type": "bool"
+            },
+            "punch_in": {
+                "access": "get, set, observe",
+                "description": "1 = the Punch-In button is enabled in the transport.",
+                "type": "bool"
+            },
+            "punch_out": {
+                "access": "get, set, observe",
+                "description": "1 = the Punch-Out button is enabled in the transport.",
+                "type": "bool"
+            },
+            "re_enable_automation_enabled": {
+                "access": "get, observe",
+                "description": "1 = the Re-Enable Automation button is on.",
+                "type": "bool"
+            },
+            "record_mode": {
+                "access": "get, set, observe",
+                "description": "1 = the Arrangement Record button is on.",
+                "type": "bool"
+            },
+            "root_note": {
+                "access": "get, set, observe",
+                "description": "The root note of the song used for control surfaces. The root note can be a number between 0 and 11, where 0 = C and 11 = B.",
+                "type": "int"
+            },
+            "scale_intervals": {
+                "access": "get, observe",
+                "description": "A list of integers representing the intervals in the current scale, expressed as the interval between the first scale degree and the scale degree at the list index.",
+                "type": "list"
+            },
+            "scale_name": {
+                "access": "get, set, observe",
+                "description": "The last used scale name used for control surfaces. The default scale names that can be saved with a Live Set are:\n'Major'\n'Minor'\n'Dorian'\n'Mixolydian'\n'Lydian'\n'Phrygian'\n'Locrian'\n'Diminished'\n'Whole-half'\n'Whole Tone'\n'Minor Blues'\n'Minor Pentatonic'\n'Major Pentatonic'\n'Harmonic Minor'\n'Melodic Minor'\n'Super Locrian'\n'Bhairav'\n'Hungarian Minor'\n'Minor Gypsy'\n'Hirojoshi'\n'In-Sen'\n'Iwato'\n'Kumoi'\n'Pelog'\n'Spanish'",
+                "type": "unicode"
+            },
+            "select_on_launch": {
+                "access": "get",
+                "description": "1 = the \"Select on Launch\" option is set in Live's\npreferences.",
+                "type": "bool"
+            },
+            "session_automation_record": {
+                "access": "get, set, observe",
+                "description": "The state of the Automation Arm button.",
+                "type": "bool"
+            },
+            "session_record": {
+                "access": "get, set, observe",
+                "description": "The state of the Session Overdub button.",
+                "type": "bool"
+            },
+            "session_record_status": {
+                "access": "get, observe",
+                "description": "Reflects the state of the Session Record button.",
+                "type": "int"
+            },
+            "signature_denominator": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "int"
+            },
+            "signature_numerator": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "int"
+            },
+            "song_length": {
+                "access": "get, observe",
+                "description": "A little more than\nlast_event_time\n, in beats.",
+                "type": "float"
+            },
+            "start_time": {
+                "access": "get, set, observe",
+                "description": "The position in the Live Set where playing will start, in beats.",
+                "type": "float"
+            },
+            "swing_amount": {
+                "access": "get, set, observe",
+                "description": "Range: 0.0 - 1.0; affects MIDI Recording Quantization and all direct calls to Clip.quantize.",
+                "type": "float"
+            },
+            "tempo": {
+                "access": "get, set, observe",
+                "description": "Current tempo of the Live Set in BPM, 20.0 ... 999.0. The tempo may\nbe automated, so it can change depending on the current song time.",
+                "type": "float"
+            },
+            "tempo_follower_enabled": {
+                "access": "get, set, observe",
+                "description": "1 = the Tempo Follower controls the tempo. The Tempo Follower Toggle must be made visible in the preferences for this property to be effective.",
+                "type": "bool"
+            }
+        }
+    },
+    "Song.View": {
+        "canonical_paths": [
+            "live_set view"
+        ],
+        "children": {
+            "detail_clip": {
+                "access": "get, set, observe",
+                "description": "The clip currently displayed in the Live application's Detail View.",
+                "type": "Clip"
+            },
+            "highlighted_clip_slot": {
+                "access": "get, set",
+                "description": "The slot highlighted in the Session View.",
+                "type": "ClipSlot"
+            },
+            "selected_chain": {
+                "access": "get, set, observe",
+                "description": "The highlighted chain, or \"id 0\"",
+                "type": "Chain"
+            },
+            "selected_parameter": {
+                "access": "get, observe",
+                "description": "The selected parameter, or \"id 0\"",
+                "type": "DeviceParameter"
+            },
+            "selected_scene": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "Scene"
+            },
+            "selected_track": {
+                "access": "get, set, observe",
+                "description": "",
+                "type": "Track"
+            }
+        },
+        "description": "This class represents the view aspects of a Live document: the Session\nand Arrangement Views.",
+        "functions": {
+            "select_device": {
+                "description": "Parameter:\nid NN\nSelects the given device object in its track.\nYou may obtain the id using a\nlive.path\nor by using\nget devices\non a track, for example.\nThe track containing the device will not be shown automatically, and\nthe device gets the appointed device (blue hand) only if its track is\nselected."
+            }
+        },
+        "properties": {
+            "draw_mode": {
+                "access": "get, set, observe",
+                "description": "Reflects the state of the envelope/automation Draw Mode Switch in the\ntransport bar, as toggled with Cmd/Ctrl-B.\n0 = breakpoint editing (shows arrow), 1 = drawing (shows pencil)",
+                "type": "bool"
+            },
+            "follow_song": {
+                "access": "get, set, observe",
+                "description": "Reflects the state of the Follow switch in the transport bar as toggled\nwith Cmd/Ctrl-F.\n0 = don't follow playback position, 1 = follow playback position",
+                "type": "bool"
+            }
+        }
+    },
+    "SpectralResonatorDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents an instance of a Spectral Resonator device in Live.\nAn SpectralResonatorDevice has all the properties, functions and children of a Device.\nListed below are members unique to SpectralResonatorDevice.",
+        "functions": {},
+        "properties": {
+            "frequency_dial_mode": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Freq control's mode.\n0 = Hertz, 1 = MIDI note values.",
+                "type": "int"
+            },
+            "midi_gate": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the MIDI gate switch's state.\n0 = Off, 1 = On.",
+                "type": "int"
+            },
+            "mod_mode": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Modulation Mode.\n0 = None, 1 = Chorus, 2 = Wander, 3 = Granular.",
+                "type": "int"
+            },
+            "mono_poly": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Mono/Poly switch's state.\n0 = Mono, 1 = Poly.",
+                "type": "int"
+            },
+            "pitch_bend_range": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Pitch Bend Range.",
+                "type": "int"
+            },
+            "pitch_mode": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Pitch Mode.\n0 = Internal, 1 = MIDI.",
+                "type": "int"
+            },
+            "polyphony": {
+                "access": "get, set, observe",
+                "description": "Get, set and observe the Polyphony.\n0 = 2, 1 = 4, 2 = 8, 3 = 16 voices.",
+                "type": "int"
+            }
+        }
+    },
+    "Track": {
+        "canonical_paths": [
+            "live_set tracks N"
+        ],
+        "children": {
+            "arrangement_clips": {
+                "access": "get, observe",
+                "description": "The list of this track's Arrangement View clip IDs\nAvailable since Live 11.0.",
+                "type": "list of Clip"
+            },
+            "clip_slots": {
+                "access": "get, observe",
+                "description": "",
+                "type": "list of ClipSlot"
+            },
+            "devices": {
+                "access": "get, observe",
+                "description": "Includes mixer device.",
+                "type": "list of Device"
+            },
+            "group_track": {
+                "access": "get",
+                "description": "The Group Track, if the Track is grouped. If it is not, id 0 is returned.",
+                "type": "Track"
+            },
+            "mixer_device": {
+                "access": "get",
+                "description": "",
+                "type": "MixerDevice"
+            },
+            "view": {
+                "access": "get",
+                "description": "",
+                "type": "Track.View"
+            }
+        },
+        "description": "This class represents a track in Live. It can either be an audio track, a\nMIDI track, a return track or the master track. The master track and at\nleast one Audio or MIDI track will be always present. Return tracks are\noptional.\nNot all properties are supported by all types of tracks. The properties\nare marked accordingly.",
+        "functions": {
+            "delete_clip": {
+                "description": "Parameter:\nclip\nDelete the given clip."
+            },
+            "delete_device": {
+                "description": "Parameter:\nindex\nDelete the device at the given index."
+            },
+            "duplicate_clip_slot": {
+                "description": "Parameter:\nindex\nWorks like 'Duplicate' in a clip's context menu."
+            },
+            "duplicate_clip_to_arrangement": {
+                "description": "Parameters:\nclip\ndestination_time\n[double]\nDuplicate the given clip to the Arrangement, placing it at the given destination_time in beats."
+            },
+            "jump_in_running_session_clip": {
+                "description": "Parameter:\nbeats\nbeats\n[double] is the amount to jump relatively to the current clip\nposition.\nModify playback position in running Session clip, if any."
+            },
+            "stop_all_clips": {
+                "description": "Stops all playing and fired clips in this track."
+            }
+        },
+        "properties": {
+            "arm": {
+                "access": "get, set, observe",
+                "description": "1 = track is armed for recording. [not in return/master tracks]",
+                "type": "bool"
+            },
+            "available_input_routing_channels": {
+                "access": "get, observe",
+                "description": "The list of available source channels for the track's input routing.\nIt's represented as a dictionary with the following key:\navailable_input_routing_channels [list]\nThe list contains dictionaries as described in input_routing_channel.\nOnly available on MIDI and audio tracks.",
+                "type": "dictionary"
+            },
+            "available_input_routing_types": {
+                "access": "get, observe",
+                "description": "The list of available source types for the track's input routing.\nIt's represented as a dictionary with the following key:\navailable_input_routing_types [list]\nThe list contains dictionaries as described in input_routing_type.\nOnly available on MIDI and audio tracks.",
+                "type": "dictionary"
+            },
+            "available_output_routing_channels": {
+                "access": "get, observe",
+                "description": "The list of available target channels for the track's output routing.\nIt's represented as a dictionary with the following key:\navailable_output_routing_channels [list]\nThe list contains dictionaries as described in output_routing_channel.\nNot available on the master track.",
+                "type": "dictionary"
+            },
+            "available_output_routing_types": {
+                "access": "get, observe",
+                "description": "The list of available target types for the track's output routing.\nIt's represented as a dictionary with the following key:\navailable_output_routing_types [list]\nThe list contains dictionaries as described in output_routing_type.\nNot available on the master track.",
+                "type": "dictionary"
+            },
+            "can_be_armed": {
+                "access": "get",
+                "description": "0 for return and master tracks.",
+                "type": "bool"
+            },
+            "can_be_frozen": {
+                "access": "get",
+                "description": "1 = the track can be frozen, 0 = otherwise.",
+                "type": "bool"
+            },
+            "can_show_chains": {
+                "access": "get",
+                "description": "1 = the track contains an Instrument Rack device that can show chains\nin Session View.",
+                "type": "bool"
+            },
+            "color": {
+                "access": "get, set, observe",
+                "description": "The RGB value of the track's color in the form\n0x00rrggbb\nor (2^16 * red) + (2^8) * green + blue, where red, green and blue are\nvalues from 0 (dark) to 255 (light).\nWhen setting the RGB value, the nearest color from the track color\nchooser is taken.",
+                "type": "int"
+            },
+            "color_index": {
+                "access": "get, set, observe",
+                "description": "The color index of the track.",
+                "type": "long"
+            },
+            "current_input_routing": {
+                "access": "get, set, observe",
+                "description": "Like all other routings, reflects the string shown in the routing selector.\nDeprecated since Live 9.7. Please use input_routing_type instead.",
+                "type": "symbol"
+            },
+            "current_input_sub_routing": {
+                "access": "get, set, observe",
+                "description": "Doesn't send any output if the selector has no entries.\nDeprecated since Live 9.7. Please use input_routing_channel instead.",
+                "type": "symbol"
+            },
+            "current_monitoring_state": {
+                "access": "get, set, observe",
+                "description": "0 = In, 1 = Auto, 2 = Off [not in return/master tracks]",
+                "type": "int"
+            },
+            "current_output_routing": {
+                "access": "get, set, observe",
+                "description": "Deprecated since Live 9.7. Please use output_routing_type instead.",
+                "type": "symbol"
+            },
+            "current_output_sub_routing": {
+                "access": "get, set, observe",
+                "description": "Doesn't send any output if the selector has no entries.\nDeprecated since Live 9.7. Please use output_routing_channel instead.",
+                "type": "symbol"
+            },
+            "fired_slot_index": {
+                "access": "get, observe",
+                "description": "Reflects the blinking clip slot.\n-1 = no slot fired, -2 = Clip Stop Button fired\nFirst clip slot has index 0.\n[not in return/master tracks]",
+                "type": "int"
+            },
+            "fold_state": {
+                "access": "get, set",
+                "description": "0 = tracks within the Group Track are visible, 1 = Group Track is folded and the tracks within the Group Track are hidden\n[only available if\nis_foldable\n= 1]",
+                "type": "int"
+            },
+            "has_audio_input": {
+                "access": "get",
+                "description": "1 for audio tracks.",
+                "type": "bool"
+            },
+            "has_audio_output": {
+                "access": "get",
+                "description": "1 for audio tracks and MIDI tracks with instruments.",
+                "type": "bool"
+            },
+            "has_midi_input": {
+                "access": "get",
+                "description": "1 for MIDI tracks.",
+                "type": "bool"
+            },
+            "has_midi_output": {
+                "access": "get",
+                "description": "1 for MIDI tracks with no instruments and no audio effects.",
+                "type": "bool"
+            },
+            "implicit_arm": {
+                "access": "get, set, observe",
+                "description": "A second arm state, only used by Push so far.",
+                "type": "bool"
+            },
+            "input_meter_left": {
+                "access": "get, observe",
+                "description": "Smoothed momentary peak value of left channel input meter, 0.0 to\n1.0. For tracks with audio output only. This value corresponds to the\nmeters shown in Live. Please take into account that the left/right\naudio meters put a significant load onto the GUI part of Live.",
+                "type": "float"
+            },
+            "input_meter_level": {
+                "access": "get, observe",
+                "description": "Hold peak value of input meters of audio and MIDI tracks, 0.0 ...\n1.0. For audio tracks it is the maximum of the left and right\nchannels. The hold time is 1 second.",
+                "type": "float"
+            },
+            "input_meter_right": {
+                "access": "get, observe",
+                "description": "Smoothed momentary peak value of right channel input meter, 0.0 to\n1.0. For tracks with audio output only. This value corresponds to the\nmeters shown in Live.",
+                "type": "float"
+            },
+            "input_routing_channel": {
+                "access": "get, set, observe",
+                "description": "The currently selected source channel for the track's input routing.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the track's available_input_routing_channels.\nOnly available on MIDI and audio tracks.",
+                "type": "dictionary"
+            },
+            "input_routing_type": {
+                "access": "get, set, observe",
+                "description": "The currently selected source type for the track's input routing.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the track's available_input_routing_types.\nOnly available on MIDI and audio tracks.",
+                "type": "dictionary"
+            },
+            "input_routings": {
+                "access": "get",
+                "description": "Available input routings. [not in master track]\nDeprecated since Live 9.7. Please use available_input_routing_types instead.",
+                "type": "list of symbols"
+            },
+            "input_sub_routings": {
+                "access": "get",
+                "description": "Available sub routings for the currently selected input routing.\nIf no entries are available, nothing is output. [not in master track]\nDeprecated since Live 9.7. Please use available_input_routing_channels instead.",
+                "type": "list of symbols"
+            },
+            "is_foldable": {
+                "access": "get",
+                "description": "1 = track can be (un)folded to hide or reveal the contained\ntracks. This is currently the case for Group Tracks. Instrument and\nDrum Racks return 0 although they can be opened/closed. This will be\nfixed in a later release.",
+                "type": "bool"
+            },
+            "is_frozen": {
+                "access": "get, observe",
+                "description": "1 = the track is currently frozen.",
+                "type": "bool"
+            },
+            "is_grouped": {
+                "access": "get",
+                "description": "1 = the track is contained within a Group Track.",
+                "type": "bool"
+            },
+            "is_part_of_selection": {
+                "access": "get",
+                "description": "",
+                "type": "bool"
+            },
+            "is_showing_chains": {
+                "access": "get, set, observe",
+                "description": "Get or set whether a track with an Instrument Rack device is currently\nshowing its chains in Session View.",
+                "type": "bool"
+            },
+            "is_visible": {
+                "access": "get",
+                "description": "0 = track is hidden in a folded Group Track.",
+                "type": "bool"
+            },
+            "mute": {
+                "access": "get, set, observe",
+                "description": "[not in master track]",
+                "type": "bool"
+            },
+            "muted_via_solo": {
+                "access": "get, observe",
+                "description": "1 = the track or chain is muted due to Solo being active on at least one other track.",
+                "type": "bool"
+            },
+            "name": {
+                "access": "get, set, observe",
+                "description": "As shown in track header.",
+                "type": "symbol"
+            },
+            "output_meter_left": {
+                "access": "get, observe",
+                "description": "Smoothed momentary peak value of left channel output meter, 0.0 to\n1.0. For tracks with audio output only. This value corresponds to the\nmeters shown in Live. Please take into account that the left/right\naudio meters add a significant load to Live GUI resource usage.",
+                "type": "float"
+            },
+            "output_meter_level": {
+                "access": "get, observe",
+                "description": "Hold peak value of output meters of audio and MIDI tracks, 0.0 to\n1.0. For audio tracks, it is the maximum of the left and right\nchannels. The hold time is 1 second.",
+                "type": "float"
+            },
+            "output_meter_right": {
+                "access": "get, observe",
+                "description": "Smoothed momentary peak value of right channel output meter, 0.0 to\n1.0. For tracks with audio output only. This value corresponds to the\nmeters shown in Live.",
+                "type": "float"
+            },
+            "output_routing_channel": {
+                "access": "get, set, observe",
+                "description": "The currently selected target channel for the track's output routing.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the track's available_output_routing_channels.\nNot available on the master track.",
+                "type": "dictionary"
+            },
+            "output_routing_type": {
+                "access": "get, set, observe",
+                "description": "The currently selected target type for the track's output routing.\nIt's represented as a dictionary with the following keys:\ndisplay_name [symbol]\nidentifier [symbol]\nCan be set to all values found in the track's available_output_routing_types.\nNot available on the master track.",
+                "type": "dictionary"
+            },
+            "output_routings": {
+                "access": "get",
+                "description": "Available output routings. [not in master track]\nDeprecated since Live 9.7. Please use available_output_routing_types instead.",
+                "type": "list of symbols"
+            },
+            "output_sub_routings": {
+                "access": "get",
+                "description": "Available sub routings for the currently selected output routing.\nIf no entries are available, nothing is output. [not in master track]\nDeprecated since Live 9.7. Please use available_output_routing_channels instead.",
+                "type": "list of symbols"
+            },
+            "performance_impact": {
+                "access": "get, observe",
+                "description": "Reports the performance impact of this track.",
+                "type": "float"
+            },
+            "playing_slot_index": {
+                "access": "get, observe",
+                "description": "First slot has index 0, -2 = Clip Stop slot fired in Session View, -1 = Arrangement recording with no Session clip playing. [not in return/master tracks]",
+                "type": "int"
+            },
+            "solo": {
+                "access": "get, set, observe",
+                "description": "Remark: when setting this property, the exclusive Solo logic is\nbypassed, so you have to unsolo the other tracks yourself. [not in\nmaster track]",
+                "type": "bool"
+            }
+        }
+    },
+    "Track.View": {
+        "canonical_paths": [
+            "live_set tracks N view"
+        ],
+        "children": {
+            "selected_device": {
+                "access": "get, observe",
+                "description": "The selected device or the first selected device (in case of multi/group selection).",
+                "type": "Device"
+            }
+        },
+        "description": "Representing the view aspects of a track.",
+        "functions": {
+            "select_instrument": {
+                "description": "Returns: bool 0 = there are no devices to select\nSelects track's instrument or first device, makes it visible and\nfocuses on it."
+            }
+        },
+        "properties": {
+            "device_insert_mode": {
+                "access": "get, set, observe",
+                "description": "Determines where a device will be inserted when loaded from the\nbrowser. 0 = add device at the end, 1 = add device\nto the left of the selected device, 2 = add device to the right\nof the selected device.",
+                "type": "int"
+            },
+            "is_collapsed": {
+                "access": "get, set, observe",
+                "description": "In Arrangement View: 1 = track collapsed, 0 = track opened.",
+                "type": "bool"
+            }
+        }
+    },
+    "WavetableDevice": {
+        "canonical_paths": [],
+        "children": {},
+        "description": "This class represents a Wavetable instrument.\nA WavetableDevice shares all of the children, functions and properties that a Device has. Listed below\nare members unique to it.",
+        "functions": {
+            "add_parameter_to_modulation_matrix": {
+                "description": "Parameter: parameter_to_add [DeviceParameter]\nAdd an instrument parameter to the modulation matrix. Only works for parameters that can be modulated (see is_parameter_modulatable)."
+            },
+            "get_modulation_target_parameter_name": {
+                "description": "Parameter: index [int]\nReturn the modulation target parameter name at index in the modulation matrix as a [symbol]."
+            },
+            "get_modulation_value": {
+                "description": "Parameters: modulation_target_index [int] modulation_source_index [int]\nReturn the amount of the modulation of the parameter at modulation_target_index by the\nmodulation source at modulation_source_index in Wavetable's modulation matrix."
+            },
+            "is_parameter_modulatable": {
+                "description": "Parameter: parameter [DeviceParameter]\n1 = parameter can be modulated. Call this before add_parameter_to_modulation_matrix."
+            },
+            "set_modulation_value": {
+                "description": "Parameters: modulation_target_index [int] modulation_source_index [int]\nSet the amount of the modulation of the parameter at modulation_target_index by the\nmodulation source at modulation_source_index in Wavetable's modulation matrix."
+            }
+        },
+        "properties": {
+            "filter_routing": {
+                "access": "get, set, observe",
+                "description": "Access to the current filter routing. 0 = Serial, 1 = Parallel, 2 = Split.",
+                "type": "int"
+            },
+            "mono_poly": {
+                "access": "get, set, observe",
+                "description": "Access to Wavetable's Poly/Mono switch. 0 = Mono, 1 = Poly.",
+                "type": "int"
+            },
+            "oscillator_1_effect_mode": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 1's effect mode. 0 = None, 1 = Fm, 2 = Classic, 3 = Modern.",
+                "type": "int"
+            },
+            "oscillator_1_wavetable_category": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 1's wavetable category selector.",
+                "type": ""
+            },
+            "oscillator_1_wavetable_index": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 1's wavetable index selector.",
+                "type": ""
+            },
+            "oscillator_1_wavetables": {
+                "access": "get, observe",
+                "description": "List of names of the wavetables currently available for oscillator 1.\nDepends on the current wavetable category selection (see oscillator_1_wavetable_category).",
+                "type": "StringVector"
+            },
+            "oscillator_2_effect_mode": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 2's effect mode.",
+                "type": "int"
+            },
+            "oscillator_2_wavetable_category": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 2's wavetable category selector.",
+                "type": ""
+            },
+            "oscillator_2_wavetable_index": {
+                "access": "get, set, observe",
+                "description": "Access to oscillator 2's wavetable index selector.",
+                "type": ""
+            },
+            "oscillator_2_wavetables": {
+                "access": "get, observe",
+                "description": "List of names of the wavetables currently available for oscillator 2.\nDepends on the current wavetable category selection (see oscillator_2_wavetable_category).",
+                "type": "StringVector"
+            },
+            "oscillator_wavetable_categories": {
+                "access": "get",
+                "description": "List of the names of the available wavetable categories.",
+                "type": "StringVector"
+            },
+            "poly_voices": {
+                "access": "get, set, observe",
+                "description": "The current number of polyphonic voices.",
+                "type": "int"
+            },
+            "unison_mode": {
+                "access": "get, set, observe",
+                "description": "Access to Wavetable's unison mode parameter.\n0 = None\n1 = Classic\n2 = Shimmer\n3 = Noise\n4 = Phase Sync\n5 = Position Spread\n6 = Random Note",
+                "type": "int"
+            },
+            "unison_voice_count": {
+                "access": "get, set, observe",
+                "description": "Access to the number of unison voices.",
+                "type": "int"
+            },
+            "visible_modulation_target_names": {
+                "access": "get, observe",
+                "description": "List of the names of modulation targets currently visible in the modulation matrix.",
+                "type": "StringVector"
+            }
+        }
+    },
+    "this_device": {
+        "canonical_paths": [
+            "live_set tracks N devices M"
+        ],
+        "children": {},
+        "description": "This root path represents the device containing the\nlive.path\nobject to which the\ngoto this_device\nmessage is sent. The class of this object is\nDevice\n.",
+        "functions": {},
+        "properties": {}
+    }
+}

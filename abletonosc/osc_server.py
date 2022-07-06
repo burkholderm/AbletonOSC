@@ -7,6 +7,7 @@ import errno
 import socket
 import logging
 import traceback
+import re
 
 class OSCServer:
     def __init__(self, local_addr=('127.0.0.1', OSC_LISTEN_PORT), remote_addr=('127.0.0.1', OSC_RESPONSE_PORT)):
@@ -24,16 +25,22 @@ class OSCServer:
         self._socket.setblocking(0)
         self._socket.bind(self._local_addr)
         self._callbacks = {}
+        self._callbacks_patterns = {}
 
         self.logger = logging.getLogger("abletonosc")
         self.logger.info("Starting OSC server (local %s, remote %s)",
                          str(self._local_addr), str(self._remote_addr))
 
     def add_handler(self, address: str, handler: Callable):
-        self._callbacks[address] = handler
+        self.logger.info("OSC handler: %s" % address)
+        if any(c in address for c in ('(', ')', r'\d', '*', '?')):
+            self._callbacks_patterns[re.compile(address)] = handler
+        else:
+            self._callbacks[address] = handler
 
     def clear_handlers(self):
         self._callbacks = {}
+        self._callbacks_patterns = {}
 
     def send(self, address: str, params: Tuple[Any] = ()) -> None:
         """
@@ -65,12 +72,24 @@ class OSCServer:
 
                     if message.address in self._callbacks:
                         callback = self._callbacks[message.address]
-                        rv = callback(message.params)
+                        rv = callback((), message.params)
 
                         if rv is not None:
+                            self.logger.info("AbletonOSC: returned: %s" % rv)
                             self.send(message.address, rv)
                     else:
-                        self.logger.info("AbletonOSC: Unknown OSC address: %s" % message.address)
+                        matched = False
+                        for pattern, callback in self._callbacks_patterns.items():
+                            m = pattern.match(message.address)
+                            if m:
+                                matched = True
+                                rv = callback(m.groups(), message.params)
+
+                                if rv is not None:
+                                    self.logger.info("AbletonOSC: returned: %s" % rv)
+                                    self.send(message.address, rv)
+                        if not matched:
+                            self.logger.info("AbletonOSC: Unknown OSC address: %s" % message.address)
                 except ParseError:
                     self.logger.info("AbletonOSC: OSC parse error: %s" % (traceback.format_exc()))
 
