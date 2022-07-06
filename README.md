@@ -20,7 +20,7 @@ AbletonOSC listens for OSC messages on port **11000**, and sends replies on port
 
 AbletonOSC exposes the [Live Object Model](https://docs.cycling74.com/max8/vignettes/live_object_model). Simply replace
 spaces with slashes to translate a *canonical path* to an OSC address. For instance, the canonical path of `ClipSlot`
-is `live_set tracks N clip_slots M`, therefore its OSC address will be `/live_set/tracks/N/clip_slots`.
+is `live_set tracks N clip_slots M`, therefore its OSC address will be `/live_set/tracks/N/clip_slots/M`.
 
 Properties have additional sub-addresses:
 
@@ -29,6 +29,8 @@ Properties have additional sub-addresses:
 - `<property-address>/start_listen` and `<property-address>/stop_listen` if the access is "observe", which respectively start and stop the automatic sending of property message; property value will be written to the reply socket as soon as it changes when the listener is running;
 
 For instance, to get song's tempo send `/live_set/song/tempo/get` and to change tempo send `/live_set/song/tempo/set 125.0`.
+
+To get color of 2nd clipslot of 4th track: `/live_set/tracks/3/clip_slots/1/color/get`.
  
 Functions can be called by appending `/call`, for instance: `/live_app/get_version_major/call`; the result of the function call will be sent to the reply socket.
 
