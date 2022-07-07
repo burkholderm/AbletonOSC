@@ -20,18 +20,29 @@ class AbletonOSCHandler(Component):
     def init_api(self):
         application = Live.Application.get_application()
 
-        self.add_live_object_model_api('/live_app', lambda: application, 'Application')
+        self.add_live_object_model_api(
+            r'/live_app',
+            lambda: application,
+            'Application'
+        )
 
-        self.add_live_object_model_api('/live_app/view', lambda: application, 'Application.View')
+        self.add_live_object_model_api(
+            r'/live_app/view',
+            lambda: application,
+            'Application.View'
+        )
 
-        def get_version(addr_args, params) -> Tuple:
-            application = Live.Application.get_application()
-            return application.get_major_version(), application.get_minor_version()
-        self.osc_server.add_handler('/live_app/get_version', get_version)
+        self.add_live_object_model_api(
+            r'/live_set',
+            lambda: self.song,
+            'Song'
+        )
 
-        self.add_live_object_model_api('/live_set', lambda: self.song, 'Song')
-
-        self.add_live_object_model_api('/live_set/view', lambda: self.song.view, 'Song.View')
+        self.add_live_object_model_api(
+            r'/live_set/view',
+            lambda: self.song.view,
+            'Song.View'
+        )
 
         self.add_live_object_model_api(
             r'/live_set/tracks/(\d+)',
@@ -40,7 +51,7 @@ class AbletonOSCHandler(Component):
         )
 
         self.add_live_object_model_api(
-            r'/live_set/tracks/0/view',
+            r'/live_set/tracks/(\d+)/view',
             lambda t: self.song.tracks[int(t)].view,
             'Track.View'
         )
@@ -51,7 +62,179 @@ class AbletonOSCHandler(Component):
             'ClipSlot'
         )
 
-        self.add_live_object_model_api('/live_set/groove_pool', lambda: self.song.groove_pool, 'GroovePool')
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/clip_slots/(\d+)/clip',
+            lambda t, c: self.song.tracks[int(t)].clip_slots[int(c)].clip,
+            'Clip'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/clip_slots/(\d+)/clip/view',
+            lambda t, c: self.song.tracks[int(t)].clip_slots[int(c)].clip.view,
+            'Clip.View'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/arrangement_clips/(\d+)',
+            lambda t, c: self.song.tracks[int(t)].arrangement_clips[int(c)],
+            'Clip'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/arrangement_clips/(\d+)/view',
+            lambda t, c: self.song.tracks[int(t)].arrangement_clips[int(c)].view,
+            'Clip.View'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/groove_pool',
+            lambda: self.song.groove_pool,
+            'GroovePool'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/groove_pool/grooves/(\d+)',
+            lambda g: self.song.groove_pool.grooves[int(g)],
+            'Groove'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/clip_slots/(\d+)/clip/groove',
+            lambda t, c: self.song.tracks[int(t)].clip_slots[int(c)].clip.groove,
+            'Groove'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)',
+            lambda t, d: self.song.tracks[int(t)].devices[int(d)],
+            'Device'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/chains/(\d+)/devices/(\d+)',
+            lambda t, d, l, k: self.song.tracks[int(t)].devices[int(d)].chains[int(l)].devices[int(k)],
+            'Device'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/return_chains/(\d+)/devices/(\d+)',
+            lambda t, d, l, k: self.song.tracks[int(t)].devices[int(d)].return_chains[int(l)].devices[int(k)],
+            'Device'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/view',
+            lambda t, d: self.song.tracks[int(t)].devices[int(d)].view,
+            'Device.View'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/chains/(\d+)/devices/(\d+)/view',
+            lambda t, d, l, k: self.song.tracks[int(t)].devices[int(d)].chains[int(l)].devices[int(k)].view,
+            'Device.View'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/return_chains/(\d+)/devices/(\d+)/view',
+            lambda t, d, l, k: self.song.tracks[int(t)].devices[int(d)].return_chains[int(l)].devices[int(k)].view,
+            'Device.View'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/parameters/(\d+)',
+            lambda t, d, l: self.song.tracks[int(t)].devices[int(d)].parameters[int(l)],
+            'DeviceParameter'
+        )
+
+        # TODO: how to expose RackDevice, since it is a specialization of Device without canonical path?
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/drum_pads/(\d+)',
+            lambda t, d, l: self.song.tracks[int(t)].devices[int(d)].drum_pads[int(l)],
+            'DrumPad'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/chains/(\d+)',
+            lambda t, d, l: self.song.tracks[int(t)].devices[int(d)].chains[int(l)],
+            'Chain'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/return_chains/(\d+)',
+            lambda t, d, l: self.song.tracks[int(t)].devices[int(d)].return_chains[int(l)],
+            'Chain'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/chains/(\d+)/devices/(\d+)/chains/(\d+)',
+            lambda t, d, l, d1, l1: self.song.tracks[int(t)].devices[int(d)].chains[int(l)].devices[int(d1)].chains[int(l1)],
+            'Chain'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/return_chains/(\d+)/devices/(\d+)/chains/(\d+)',
+            lambda t, d, l, d1, l1: self.song.tracks[int(t)].devices[int(d)].return_chains[int(l)].devices[int(d1)].chains[int(l1)],
+            'Chain'
+        )
+
+        # TODO: how to expose DrumChain, since it is a specialization of Chain without canonical path?
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/chains/(\d+)/mixer_device',
+            lambda t, d, c: self.song.tracks[int(t)].devices[int(d)].chains[int(c)].mixer_device,
+            'ChainMixerDevice'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/return_chains/(\d+)/mixer_device',
+            lambda t, d, c: self.song.tracks[int(t)].devices[int(d)].return_chains[int(c)].mixer_device,
+            'ChainMixerDevice'
+        )
+
+        # TODO: how to expose SimplerDevice, SimplerDevice.View?
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/devices/(\d+)/sample',
+            lambda t, d: self.song.tracks[int(t)].devices[int(d)].sample,
+            'Sample'
+        )
+
+        # TODO: how to expose WavetableDevice, CompressorDevice, PluginDevice, MaxDevice, Eq8Device,
+        #       HybridReverbDevice, SpectralResonatorDevice?
+
+        self.add_live_object_model_api(
+            r'/live_set/tracks/(\d+)/mixer_device',
+            lambda t: self.song.tracks[int(t)].mixer_device,
+            'MixerDevice'
+        )
+
+        # TODO: how to expose DeviceIO?
+
+        self.add_live_object_model_api(
+            r'/live_set/scenes/(\d+)',
+            lambda s: self.song.scenes[int(s)],
+            'Scene'
+        )
+
+        self.add_live_object_model_api(
+            r'/live_set/cue_points/(\d+)',
+            lambda c: self.song.cue_points[int(c)],
+            'CuePoint'
+        )
+
+        #self.add_live_object_model_api(
+        #    r'/control_surfaces/(\d+)',
+        #    lambda c: self.???[int(c)],
+        #    'ControlSurface'
+        #)
+
+        # additional custom addresses:
+
+        def get_version(addr_args, params) -> Tuple:
+            application = Live.Application.get_application()
+            return application.get_major_version(), application.get_minor_version()
+        self.osc_server.add_handler('/live_app/get_version', get_version)
 
 
     def clear_api(self):
