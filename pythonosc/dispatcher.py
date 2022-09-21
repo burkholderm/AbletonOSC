@@ -148,10 +148,10 @@ class Dispatcher(object):
         # Let's consider numbers and _ "characters" too here, it's not said
         # explicitly in the specification but it sounds good.
         escaped_address_pattern = re.escape(address_pattern)
-        pattern = escaped_address_pattern.replace('\\?', '\\w?')
+        pattern = escaped_address_pattern.replace(r'\?', r'\w?')
         # '*' in the OSC Address Pattern matches any sequence of zero or more
         # characters.
-        pattern = pattern.replace('\\*', '[\w|\+]*')
+        pattern = pattern.replace(r'\*', r'[\w|\+]*')
         # The rest of the syntax in the specification is like the re module so
         # we're fine.
         pattern = pattern + '$'
