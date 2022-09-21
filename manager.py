@@ -17,7 +17,7 @@ if sys.platform == "darwin":
     tmp_dir = "/tmp"
 else:
     # On Windows, put logs in c:\temp
-    tmp_dir = "c:\temp"
+    tmp_dir = r"c:\temp"
 
 log_path = os.path.join(tmp_dir, "abletonosc.log")
 file_handler = logging.FileHandler(log_path)
